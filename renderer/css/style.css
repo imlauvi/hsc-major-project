@@ -1,0 +1,23 @@
+@import url(themes.css);
+
+body {
+    margin: 0;
+    background: var(--clr-surface-a20);
+    color: var(--clr-light-a0);
+}
+
+.content {
+    border-top: 1px solid var(--clr-surface-a40);
+}
+
+.titlebar {
+    height: 30px;
+    background: var(--clr-surface-a20);
+    border-bottom: 1px solid var(--clr-surface-a20); /*this works ig*/
+    color: var(--clr-light-a0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    app-region: drag; /*dont worry about the error*/
+}

@@ -1,27 +1,61 @@
-const sqlite3 = require("sqlite3").verbose();
-const port = process.env.PORT || 80;
+const { app, BrowserWindow } = require('electron')
+const path = require('path')
 
-var bodyParser = require('body-parser');
+let win
 
-const cors=require("cors");
-const express = require("express");
-const path = require("node:path");
-const app = express();
+function createWindow () {
+    // Create the browser window.
+    win = new BrowserWindow({
+        titleBarStyle: 'hidden',
+        ...(process.platform !== 'darwin' ? { 
+            titleBarOverlay: {
+                color: '#353535',
+                symbolColor: '#ffffff',
+                height: 30,
+            } 
+        } : {}),
+        width: 800,
+        height: 600,
+        icon: path.join(__dirname, 'renderer/icons/icon.png'),
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: true,
+            devTools: true,
+            preload: path.join(__dirname, "preload.js")
+        }
+    })
 
-app.use(cors());
-app.use(express.json({limit: '50mb'}));
-app.use(
-    bodyParser.urlencoded({
-        extended: true,
-        limit: '50mb'
-    }),
-    express.static(path.join(__dirname, "public"))
-);
+    // and load the index.html of the app.
+    win.loadFile(path.join(__dirname, './renderer/index.html'))
+    //win.loadURL('https://google.com/')
 
-app.get("/",
-    function(req,res){
-        res.sendFile(path.join(__dirname,"public/index.html"));
+    // Emitted when the window is closed.
+    win.on('closed', () => {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        win = null
+    })
+}
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.on('ready', createWindow)
+
+// Quit when all windows are closed.
+app.on('window-all-closed', () => {
+    // On macOS it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') {
+        app.quit()
     }
-)
+})
 
-app.listen(port, () => console.log(`Server is running on Port ${port}, visit http://localhost:${port}/ or http://127.0.0.1:${port} to access your website`));
+app.on('activate', () => {
+    // On macOS it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (win === null) {
+        createWindow()
+    }
+})
