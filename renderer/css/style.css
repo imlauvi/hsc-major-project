@@ -1,23 +1,183 @@
 @import url(themes.css);
+@import url('https://fonts.cdnfonts.com/css/consola-mono');
+
+:root{
+    --top-bar-height: 30px;
+    --bottom-bar-height: 30px;
+    --side-bar-width: 50px;
+    --sidetab-width: 100px;
+    --terminal-height: 100px;
+    --windows-height: 30px;
+    --path-info-height: 20px;
+}
 
 body {
     margin: 0;
-    background: var(--clr-surface-a20);
+    background: var(--clr-surface-a10);
     color: var(--clr-light-a0);
+    font-family: Segoe WPC, Segoe UI, sans-serif;
+}
+
+span{
+    font-family: Segoe WPC, Segoe UI, sans-serif;
 }
 
 .content {
-    border-top: 1px solid var(--clr-surface-a40);
+    height: calc(100vh - var(--top-bar-height) - var(--bottom-bar-height));
+    border-top: 1px solid var(--clr-surface-a30);
 }
 
 .titlebar {
-    height: 30px;
-    background: var(--clr-surface-a20);
-    border-bottom: 1px solid var(--clr-surface-a20); /*this works ig*/
+    font-size: 13px;
+    height: var(--top-bar-height);
+    background: var(--clr-surface-a10);
+    border-bottom: 1px solid var(--clr-surface-a10); /*this works ig*/
     color: var(--clr-light-a0);
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    width: 100%;
     align-items: center;
     user-select: none;
     app-region: drag; /*dont worry about the error*/
+}
+
+.top-btn{
+    padding: 2px 6px;
+    margin-left: 10px;
+    background-color: var(--clr-surface-a10);
+    border-radius: 4px;
+    line-height: 0px;
+    align-items: center;
+    app-region: no-drag;
+}
+
+.top-btn:hover{
+    background-color: var(--clr-surface-a20);
+}
+
+.sidenav{
+    width: var(--side-bar-width);
+    text-align: center;
+}
+
+.side-icon{
+    font-size: 25px;
+    padding: 8px;
+    padding-left: 3px;
+    padding-right: 5px;
+    margin-left: 3px;
+    border-left: transparent 2px solid;
+    color: var(--clr-surface-a50);
+}
+
+.side-icon[focused]{
+    border-left: var(--clr-primary-a0) 2px solid;
+    color: var(--clr-light-a0);
+}
+
+.side-icon:hover{
+    color: var(--clr-light-a0);
+}
+
+.side-icon:hover .tooltip{
+    visibility: visible;
+}
+
+.tooltip{
+    visibility: hidden;
+    position: absolute;
+    text-align: center;
+    padding: 1px 7px;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 13px;
+    margin-top: 6px;
+    background-color: var(--clr-surface-a20);
+    border-color: var(--clr-surface-a40);
+}
+
+.tooltip-left{
+    margin-left: 14px;
+}
+
+.tooltip-left:before{
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-left: 5px solid transparent;
+    border-right: 5px solid var(--clr-surface-a40);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    left: -10px;
+    top: 5px;
+}
+
+.tooltip-left:after{
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-left: 5px solid transparent;
+    border-right: 5px solid var(--clr-surface-a20);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    left: -9px;
+    top: 5px;
+}
+
+.bottomnav{
+    height: var(--bottom-bar-height);
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    position: absolute;
+    bottom: 0;
+    background: var(--clr-surface-a10);
+    border-top: 1px solid var(--clr-surface-a30);
+}
+
+.side {
+    float: left;
+    height: calc(100vh - var(--top-bar-height) - var(--bottom-bar-height));
+    border-right: 1px solid var(--clr-surface-a30);
+}
+
+.sidetab{
+    width: var(--sidetab-width);
+}
+
+.main{
+    width: 100%;
+    height: calc(100% - var(--terminal-height));
+}
+
+.windows{
+    display: flex;
+    height: var(--windows-height);
+    align-items: center;
+    border-bottom: 1px solid var(--clr-surface-a30);
+}
+
+.codearea{
+    display: flex;
+    height: 100%;
+    background-color: var(--clr-surface-a20);
+}
+
+.pathinfo{
+    display: flex;
+    height: var(--path-info-height);
+    width: 100%;
+    border-bottom: 1px solid var(--clr-surface-a30);
+}
+
+.terminal{
+    height: var(--terminal-height);
+    display: flex;
+    background-color: var(--clr-surface-a10);
+    border-top: 1px solid var(--clr-surface-a30);
 }

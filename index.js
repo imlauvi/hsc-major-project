@@ -6,10 +6,11 @@ let win
 function createWindow () {
     // Create the browser window.
     win = new BrowserWindow({
+        frame: false,
         titleBarStyle: 'hidden',
         ...(process.platform !== 'darwin' ? { 
             titleBarOverlay: {
-                color: '#353535',
+                color: '#1e1e1e',
                 symbolColor: '#ffffff',
                 height: 30,
             } 
@@ -22,7 +23,8 @@ function createWindow () {
             contextIsolation: true,
             devTools: true,
             preload: path.join(__dirname, "preload.js")
-        }
+        },
+        acceptFirstMouse: true,
     })
 
     // and load the index.html of the app.
