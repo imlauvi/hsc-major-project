@@ -16,6 +16,7 @@ body {
     background: var(--clr-surface-a10);
     color: var(--clr-light-a0);
     font-family: Segoe WPC, Segoe UI, sans-serif;
+    /* overflow: hidden; */
 }
 
 span{
@@ -42,7 +43,10 @@ span{
 }
 
 .top-btn{
-    padding: 2px 6px;
+    display: inline;
+    padding: 0px 5px;
+    padding-bottom: 1px;
+    padding-left: 8px; 
     margin-left: 10px;
     background-color: var(--clr-surface-a10);
     border-radius: 4px;
@@ -88,6 +92,7 @@ span{
     position: absolute;
     text-align: center;
     padding: 1px 7px;
+    padding-bottom: 2px;
     border-radius: 3px;
     border-width: 1px;
     border-style: solid;
@@ -111,7 +116,7 @@ span{
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
     left: -10px;
-    top: 5px;
+    top: 6px;
 }
 
 .tooltip-left:after{
@@ -124,7 +129,7 @@ span{
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
     left: -9px;
-    top: 5px;
+    top: 6px;
 }
 
 .bottomnav{
@@ -148,6 +153,27 @@ span{
 
 .sidetab{
     width: var(--sidetab-width);
+    height: calc(100% - 2px);
+    max-width: 500px;
+    min-width: 100px;
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+}
+
+.sidetab-resize{
+    height: calc(100% - 5px);
+    margin-left: var(--sidetab-width);
+    border: 2px solid var(--clr-primary-a0);
+    z-index: 1;
+    position: absolute;
+    opacity: 0;
+    cursor: ew-resize;
+    transition: opacity 0.2s;
+}
+
+.sidetab-resize:hover, .sidetab-resize[resizing]{
+    opacity: 1;
 }
 
 .main{

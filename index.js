@@ -1,3 +1,5 @@
+//use npm drag-tabs?
+
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 
