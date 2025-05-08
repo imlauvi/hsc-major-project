@@ -6,7 +6,7 @@
     --bottom-bar-height: 30px;
     --side-bar-width: 50px;
     --sidetab-width: 100px;
-    --terminal-height: 100px;
+    --terminal-height: 200px;
     --windows-height: 30px;
     --path-info-height: 20px;
 }
@@ -16,7 +16,7 @@ body {
     background: var(--clr-surface-a10);
     color: var(--clr-light-a0);
     font-family: Segoe WPC, Segoe UI, sans-serif;
-    /* overflow: hidden; */
+    overflow: hidden;
 }
 
 span{
@@ -159,6 +159,7 @@ span{
     display: flex;
     position: relative;
     justify-content: space-between;
+    user-select: none;
 }
 
 .sidetab-resize{
@@ -178,7 +179,7 @@ span{
 
 .main{
     width: 100%;
-    height: calc(100% - var(--terminal-height));
+    height: calc(100% - var(--terminal-height) - var(--bottom-bar-height));
 }
 
 .windows{
@@ -203,7 +204,23 @@ span{
 
 .terminal{
     height: var(--terminal-height);
+    min-height: 50px;
+    max-height: 300px;
     display: flex;
     background-color: var(--clr-surface-a10);
     border-top: 1px solid var(--clr-surface-a30);
+}
+
+.terminal-resize{
+    width: calc(100% - var(--sidetab-width));
+    border: 2px solid var(--clr-primary-a0);
+    z-index: 1;
+    position: absolute;
+    opacity: 0;
+    cursor: ns-resize;
+    transition: opacity 0.2s;
+}
+
+.terminal-resize:hover, .terminal-resize[resizing]{
+    opacity: 1;
 }
