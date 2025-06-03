@@ -6,9 +6,14 @@
     --bottom-bar-height: 30px;
     --side-bar-width: 50px;
     --sidetab-width: 100px;
-    --terminal-height: 200px;
+    --sidetab-width-min: 100px;
+    --sidetab-width-max: 400px;
+    --terminal-height: 100px;
+    --terminal-height-min: 100px;
+    --terminal-height-max: 400px;
     --windows-height: 30px;
     --path-info-height: 20px;
+    --codearea-left-width: 50%;
 }
 
 body {
@@ -154,17 +159,16 @@ span{
 .sidetab{
     width: var(--sidetab-width);
     height: calc(100% - 2px);
-    max-width: 500px;
-    min-width: 100px;
     display: flex;
     position: relative;
     justify-content: space-between;
     user-select: none;
+    visibility: visible;
 }
 
 .sidetab-resize{
-    height: calc(100% - 5px);
-    margin-left: var(--sidetab-width);
+    height: calc(100% - 4px);
+    margin-left: calc(var(--sidetab-width) - 2px);
     border: 2px solid var(--clr-primary-a0);
     z-index: 1;
     position: absolute;
@@ -173,13 +177,25 @@ span{
     transition: opacity 0.2s;
 }
 
-.sidetab-resize:hover, .sidetab-resize[resizing]{
+.sidetab-resize:hover{
     opacity: 1;
+}
+
+.sidetab-resize[resizing]{
+    opacity: 1 !important;
+}
+
+body[resizing] .sidetab-resize:hover{
+    opacity: 0;
+}
+
+.sidetab[ishidden=true] .sidetab-content{
+    visibility: hidden;
 }
 
 .main{
     width: 100%;
-    height: calc(100% - var(--terminal-height) - var(--bottom-bar-height));
+    height: 100%;
 }
 
 .windows{
@@ -187,12 +203,83 @@ span{
     height: var(--windows-height);
     align-items: center;
     border-bottom: 1px solid var(--clr-surface-a30);
+    background-color: var(--clr-surface-a10);
 }
 
 .codearea{
     display: flex;
-    height: 100%;
+    height: calc(100% - var(--terminal-height) + 4px);
     background-color: var(--clr-surface-a20);
+    visibility: visible;
+}
+
+.codearea[ishidden=true]{
+    visibility: hidden;
+}
+
+.codearea-left{
+    width: var(--codearea-left-width);
+    border-right: 1px solid var(--clr-surface-a30);
+    height: 100%;
+    max-width: calc(100% - 50px);
+    min-width: 50px;
+}
+
+.codearea[opened="10"] .codearea-left{
+    width: 100%;
+    max-width: 100%;
+}
+
+.codearea[opened="01"] .codearea-left{
+    width: 0%;
+    min-width: 0;
+    visibility: hidden;
+}
+
+.codearea-right{
+    width: calc(100% - var(--codearea-left-width));
+    height: 100%;
+    max-width: calc(100% - 50px);
+    min-width: 50px;
+}
+
+.codearea[opened="10"] .codearea-right{
+    width: 0%;
+    min-width: 0;
+    visibility: hidden;
+}
+
+.codearea[opened="01"] .codearea-right{
+    width: 100%;
+    max-width: 100%;
+}
+
+.codearea-left-resize{
+    margin-left: 0;
+    border: 2px solid var(--clr-primary-a0);
+    z-index: 1;
+    position: absolute;
+    opacity: 0;
+    cursor: ew-resize;
+    transition: opacity 0.2s;
+    visibility: hidden;
+    height: calc(100% - var(--terminal-height) - var(--windows-height) - var(--path-info-height) - 10px); /*this shouldnt work but it does i have no idea why*/
+}
+
+.codearea[opened="11"] .codearea-left-resize{
+    visibility: visible;
+}
+
+.codearea-left-resize:hover{
+    opacity: 1;
+} 
+
+.codearea-left-resize[resizing]{
+    opacity: 1 !important;
+}
+
+body[resizing] .codearea-left-resize:hover{
+    opacity: 0;
 }
 
 .pathinfo{
@@ -203,17 +290,22 @@ span{
 }
 
 .terminal{
-    height: var(--terminal-height);
-    min-height: 50px;
-    max-height: 300px;
+    height: calc(var(--terminal-height) - 4px);
     display: flex;
     background-color: var(--clr-surface-a10);
     border-top: 1px solid var(--clr-surface-a30);
+    visibility: visible;
+}
+
+.terminal[full=true]{
+    border-top: none;
 }
 
 .terminal-resize{
     width: calc(100% - var(--sidetab-width));
     border: 2px solid var(--clr-primary-a0);
+    margin-top: -2px;
+    left: calc(var(--sidetab-width) + var(--side-bar-width) + 1px);
     z-index: 1;
     position: absolute;
     opacity: 0;
@@ -221,6 +313,18 @@ span{
     transition: opacity 0.2s;
 }
 
-.terminal-resize:hover, .terminal-resize[resizing]{
+.terminal-resize:hover{
     opacity: 1;
+}
+
+.terminal-resize[resizing]{
+    opacity: 1 !important;
+}
+
+body[resizing] .terminal-resize:hover{
+    opacity: 0;
+}
+
+.terminal[ishidden=true] .terminal-content{
+    visibility: hidden;
 }

@@ -6,7 +6,7 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/themes.css" rel="stylesheet">
-    <script src="main.js"></script>
+    <script src="resize.js"></script>
     <title>HSC major project</title>
 </head>
 <body>
@@ -58,20 +58,34 @@
             <div class="sidetab-resize" id="sidetab-resize"></div>
         </div>
         <div class="main" id="main">
-            <div class="windows" id="windows">
+            <div class="codearea" id="codearea" opened="11">
+                <div class="codearea-left" id="codearea-left" opened>
+                    <div class="windows" id="windows-left">
                 
-            </div>
-            <div class="codearea">
-                <div class="pathinfo">
+                    </div>
+                    <div class="code" id="code-right">
+                        <div class="pathinfo" id="pathinfo-left">
 
+                        </div>
+                    </div>
                 </div>
-                <div class="code" id="code">
+                <div class="codearea-left-resize" id="codearea-left-resize"></div>
+                <div class="codearea-right" id="codearea-right" opened>
+                    <div class="windows" id="windows-right">
+                
+                    </div>
+                    <div class="code" id="code-right">
+                        <div class="pathinfo" id="pathinfo-right">
 
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="terminal" id="terminal">
                 <div class="terminal-resize" id="terminal-resize"></div>
-                test
+                <div class="terminal-content" id="terminal-content">
+                    test
+                </div>
             </div>
         </div>
     </div>

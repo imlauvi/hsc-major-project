@@ -1,3 +1,5 @@
 {
-    "npm-scripts.showStartNotification": false
+    "npm-scripts.showStartNotification": false,
+    "vscode-pets.theme": "winter",
+    "vscode-pets.petColor": "brown"
 }
