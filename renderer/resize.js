@@ -14,6 +14,16 @@ document.addEventListener('selectstart', function(e) {
     }
 });
 
+document.addEventListener('dragstart', function(e) {
+    if(resizing){
+        e.preventDefault();
+        return false;
+    }
+    else{
+        return true;
+    }
+});
+
 
 function sideTabResize(){ //maybe add mobile support
     const sideTabResize = getElement("sidetab-resize");
@@ -193,8 +203,9 @@ document.addEventListener('DOMContentLoaded', function(){
     terminalResize();
     codeAreaResize();
     adjustCodeareaResize();
+
+    addEventListener("resize", function(){
+        adjustCodeareaResize();
+    })
 })
 
-addEventListener("resize", function(){
-    adjustCodeareaResize();
-})

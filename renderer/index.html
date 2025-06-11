@@ -7,6 +7,7 @@
     <link href="css/style.css" rel="stylesheet">
     <link href="css/themes.css" rel="stylesheet">
     <script src="resize.js"></script>
+    <script src="tabs.js"></script>
     <title>HSC major project</title>
 </head>
 <body>
@@ -58,28 +59,51 @@
             <div class="sidetab-resize" id="sidetab-resize"></div>
         </div>
         <div class="main" id="main">
-            <div class="codearea" id="codearea" opened="11">
+            <div class="codearea" id="codearea" opened="10">
                 <div class="codearea-left" id="codearea-left" opened>
-                    <div class="windows" id="windows-left">
-                
+                    <div class="tabs" id="tabs-left">
+                        <div class="tab" id="example-tab" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true" selected>
+                            <div class="tab-name">
+                                example
+                            </div>
+                            <div class="close-tab">
+                                &#10005;
+                            </div>
+                        </div>
+                        <div class="tab" id="example-tab" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true">
+                            <div class="tab-name">
+                                example
+                            </div>
+                            <div class="close-tab">
+                                &#10005;
+                            </div>
+                        </div>
+                        <div class="tab-drop-indicator" id="tab-drop-indicator-left" ishidden="null"></div>
                     </div>
-                    <div class="code" id="code-right">
-                        <div class="pathinfo" id="pathinfo-left">
+                    <div class="tab-content" id="tab-content-left">
+                        <div class="window">
+                            <div class="pathinfo" id="example-window">
 
+                            </div>
+                            test left
                         </div>
                     </div>
                 </div>
                 <div class="codearea-left-resize" id="codearea-left-resize"></div>
                 <div class="codearea-right" id="codearea-right" opened>
-                    <div class="windows" id="windows-right">
-                
+                    <div class="tabs" id="tabs-right">
+                        <div class="tab-drop-indicator" id="tab-drop-indicator-right" ishidden="null"></div>
                     </div>
-                    <div class="code" id="code-right">
-                        <div class="pathinfo" id="pathinfo-right">
+                    <div class="tab-content" id="tab-content-right">
+                        <div class="window">
+                            <div class="pathinfo" id="example-window-2">
 
+                            </div>
+                            test right
                         </div>
                     </div>
                 </div>
+                <div class="drop-indicator" id="drop-indicator" ishidden="null"></div>
             </div>
             <div class="terminal" id="terminal">
                 <div class="terminal-resize" id="terminal-resize"></div>

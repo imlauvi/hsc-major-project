@@ -11,7 +11,7 @@
     --terminal-height: 100px;
     --terminal-height-min: 100px;
     --terminal-height-max: 400px;
-    --windows-height: 30px;
+    --tabs-height: 25px;
     --path-info-height: 20px;
     --codearea-left-width: 50%;
 }
@@ -105,6 +105,7 @@ span{
     margin-top: 6px;
     background-color: var(--clr-surface-a20);
     border-color: var(--clr-surface-a40);
+    z-index: 1;
 }
 
 .tooltip-left{
@@ -198,12 +199,69 @@ body[resizing] .sidetab-resize:hover{
     height: 100%;
 }
 
-.windows{
+.tabs{
     display: flex;
-    height: var(--windows-height);
+    height: var(--tabs-height);
     align-items: center;
     border-bottom: 1px solid var(--clr-surface-a30);
     background-color: var(--clr-surface-a10);
+}
+
+.tab{
+    display: flex;
+    height: 100%;
+    align-items: center;
+    background-color: var(--clr-surface-a10);
+    user-select: none;
+    padding-inline: 10px;
+    color: var(--clr-surface-a50);
+    border-right: 1px solid var(--clr-surface-a30);
+}
+
+.tab[selected]{
+    color: var(--clr-light-a0);
+    background-color: var(--clr-surface-a20);
+    margin-top: 1px;
+    border-bottom: 1px solid var(--clr-surface-a20);
+    outline: none;
+}
+
+.tab:hover{
+    background-color: var(--clr-surface-a20);
+}
+
+.tab-name{
+    font-size: 14px;
+}
+
+.close-tab{
+    margin-left: 5px;
+    font-size: 12px;
+    border-radius: 5px;
+    padding-inline: 3px;
+    background-color: none;
+    opacity: 0;
+}
+
+.tab[selected] .close-tab, .tab:hover .close-tab{
+    opacity: 1;
+}
+
+.tab-drop-indicator{
+    position: absolute;
+    height: var(--tabs-height);
+    width: 2px;
+    background-color: var(--clr-light-a0);
+    visibility: visible;
+    /* margin-left: 0; */
+}
+
+.tab-drop-indicator[ishidden]{
+    visibility: hidden;
+}
+
+.close-tab:hover{
+    background-color: var(--clr-surface-a30);
 }
 
 .codearea{
@@ -263,7 +321,7 @@ body[resizing] .sidetab-resize:hover{
     cursor: ew-resize;
     transition: opacity 0.2s;
     visibility: hidden;
-    height: calc(100% - var(--terminal-height) - var(--windows-height) - var(--path-info-height) - 10px); /*this shouldnt work but it does i have no idea why*/
+    height: calc(100% - var(--terminal-height) - var(--tabs-height) - var(--path-info-height) - 15px); /*this shouldnt work but it does i have no idea why*/
 }
 
 .codearea[opened="11"] .codearea-left-resize{
@@ -282,6 +340,28 @@ body[resizing] .codearea-left-resize:hover{
     opacity: 0;
 }
 
+.tab-content{
+    height: calc(100% - var(--tabs-height));
+}
+
+.drop-indicator{
+    position: absolute;
+    margin-top: calc(var(--tabs-height));
+    height: calc(100% - var(--tabs-height) - var(--terminal-height) - 55px);
+    width: 100%;
+    margin-left: 0;
+    background-color: #57575781;
+    opacity: 1;
+    pointer-events: none;
+    transition: 0.1s all;
+}
+
+.drop-indicator[ishidden]{
+    opacity: 0;
+    width: 100%;
+    transition: 0s all;
+}
+
 .pathinfo{
     display: flex;
     height: var(--path-info-height);
@@ -295,6 +375,7 @@ body[resizing] .codearea-left-resize:hover{
     background-color: var(--clr-surface-a10);
     border-top: 1px solid var(--clr-surface-a30);
     visibility: visible;
+    z-index: 1;
 }
 
 .terminal[full=true]{
