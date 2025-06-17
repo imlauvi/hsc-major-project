@@ -6,8 +6,8 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/themes.css" rel="stylesheet">
-    <script src="resize.js"></script>
-    <script src="tabs.js"></script>
+    <script src="js/resize.js"></script>
+    <script src="js/tabs.js"></script>
     <title>HSC major project</title>
 </head>
 <body>
@@ -60,9 +60,9 @@
         </div>
         <div class="main" id="main">
             <div class="codearea" id="codearea" opened="10">
-                <div class="codearea-left" id="codearea-left" opened>
+                <div class="codearea-left codearea-group" id="codearea-left" opened>
                     <div class="tabs" id="tabs-left">
-                        <div class="tab" id="example-tab" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true" selected>
+                        <div class="tab" id="example-tab" tabid="example" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true" selected>
                             <div class="tab-name">
                                 example
                             </div>
@@ -70,9 +70,17 @@
                                 &#10005;
                             </div>
                         </div>
-                        <div class="tab" id="example-tab" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true">
+                        <div class="tab" id="example2-tab" tabid="example2" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true">
                             <div class="tab-name">
-                                example
+                                example2
+                            </div>
+                            <div class="close-tab">
+                                &#10005;
+                            </div>
+                        </div>
+                        <div class="tab" id="example3-tab" tabid="example3" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true">
+                            <div class="tab-name">
+                                example3
                             </div>
                             <div class="close-tab">
                                 &#10005;
@@ -81,27 +89,32 @@
                         <div class="tab-drop-indicator" id="tab-drop-indicator-left" ishidden="null"></div>
                     </div>
                     <div class="tab-content" id="tab-content-left">
-                        <div class="window">
-                            <div class="pathinfo" id="example-window">
+                        <div class="window" id="example-tab-content" tabid="example" active="null">
+                            <div class="pathinfo">
 
                             </div>
-                            test left
+                            test1
+                        </div>
+                        <div class="window" id="example2-tab-content" tabid="example2">
+                            <div class="pathinfo">
+
+                            </div>
+                            test2
+                        </div>
+                        <div class="window" id="example3-tab-content" tabid="example3">
+                            <div class="pathinfo">
+
+                            </div>
+                            test3
                         </div>
                     </div>
                 </div>
                 <div class="codearea-left-resize" id="codearea-left-resize"></div>
-                <div class="codearea-right" id="codearea-right" opened>
+                <div class="codearea-right codearea-group" id="codearea-right" opened>
                     <div class="tabs" id="tabs-right">
                         <div class="tab-drop-indicator" id="tab-drop-indicator-right" ishidden="null"></div>
                     </div>
-                    <div class="tab-content" id="tab-content-right">
-                        <div class="window">
-                            <div class="pathinfo" id="example-window-2">
-
-                            </div>
-                            test right
-                        </div>
-                    </div>
+                    <div class="tab-content" id="tab-content-right"></div>
                 </div>
                 <div class="drop-indicator" id="drop-indicator" ishidden="null"></div>
             </div>

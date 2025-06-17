@@ -344,6 +344,16 @@ body[resizing] .codearea-left-resize:hover{
     height: calc(100% - var(--tabs-height));
 }
 
+.window{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.window:not([active]){
+    visibility: hidden;
+}
+
 .drop-indicator{
     position: absolute;
     margin-top: calc(var(--tabs-height));
