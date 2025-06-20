@@ -48,6 +48,7 @@ span{
 }
 
 .top-btn{
+    position: relative;
     display: inline;
     padding: 0px 5px;
     padding-bottom: 1px;
@@ -62,6 +63,44 @@ span{
 
 .top-btn:hover{
     background-color: var(--clr-surface-a20);
+}
+
+body[dropdown-active] .dropdown-trigger[active]{
+    background-color: var(--clr-surface-a20);
+}
+
+ul{
+    padding: 0;
+    list-style-type: none;
+}
+
+.dropdown{
+    position: absolute;
+    width: 100px;
+    background-color: var(--clr-surface-a10);
+    border-radius: 2px;
+    border: 1px solid var(--clr-surface-a30);
+    z-index: 2;
+    left: 0;
+    top: 8px;
+    padding: 4px;
+}
+
+.dropdown-item{
+    padding: 8px;
+    border-radius: 2px;
+}
+
+.dropdown-item + .dropdown-item{
+    margin-top: 3px;
+}
+
+.dropdown-item:hover{
+    background-color: var(--clr-primary-a0);
+}
+
+body:not([dropdown-active]) .dropdown, .dropdown-trigger:not([active]) .dropdown{
+    visibility: hidden !important;
 }
 
 .sidenav{
@@ -105,7 +144,7 @@ span{
     margin-top: 6px;
     background-color: var(--clr-surface-a20);
     border-color: var(--clr-surface-a40);
-    z-index: 1;
+    z-index: 3;
 }
 
 .tooltip-left{
@@ -165,6 +204,9 @@ span{
     justify-content: space-between;
     user-select: none;
     visibility: visible;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: nowrap;
 }
 
 .sidetab-resize{
@@ -192,6 +234,10 @@ body[resizing] .sidetab-resize:hover{
 
 .sidetab[ishidden=true] .sidetab-content{
     visibility: hidden;
+}
+
+.sidetab-content{
+    width: 100%;
 }
 
 .main{

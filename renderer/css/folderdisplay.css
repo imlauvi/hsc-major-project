@@ -1,0 +1,10 @@
+.path-container{
+    width: 100%;
+}
+
+.path-name{
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -5,26 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/folderdisplay.css" rel="stylesheet">
     <link href="css/themes.css" rel="stylesheet">
     <script src="js/resize.js"></script>
     <script src="js/tabs.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/dropdown.js"></script>
     <title>HSC major project</title>
 </head>
 <body>
     <div class="fixednav">
         <div class="titlebar" id="titlebar">
             <div class="left-buttons">
-                <btn class="top-btn">
+                <btn class="top-btn dropdown-trigger" id="file-btn">
                     File
+
+                    <ul class="dropdown">
+                        <li class="dropdown-item" onclick="openFolder()">Open folder</li>
+                        <li class="dropdown-item" onclick="">Save</li>
+                        <li class="dropdown-item" onclick="">Save all</li>
+                    </ul>
                 </btn>
-                <btn class="top-btn">
+                <btn class="top-btn dropdown-trigger" id="settings-btn">
                     Settings
+
+                    <ul class="dropdown">
+                        <li class="dropdown-item">test</li>
+                    </ul>
                 </btn>
-                <btn class="top-btn">
-                    Run
-                </btn>
-                <btn class="top-btn">
+                <btn class="top-btn dropdown-trigger" id="help-btn">
                     Help
+
+                    <ul class="dropdown">
+                        <li class="dropdown-item">test</li>
+                    </ul>
                 </btn>
             </div>
         </div>
