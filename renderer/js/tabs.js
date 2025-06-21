@@ -156,14 +156,14 @@ document.addEventListener('DOMContentLoaded', function(){
             ev.preventDefault();
         });
         tabDrops[i].addEventListener("drop", function(event){
-            let droppedTab = document.querySelector(`.tab[tabid="${event.dataTransfer.getData("text")}"]`);
+            let droppedTab = document.querySelector(`.tab[tabpath="${escapePath(event.dataTransfer.getData("text"))}"]`);
             if(!dropTabRef){
                 tabDrops[i].appendChild(droppedTab);
             }
             else{
                 tabDrops[i].insertBefore(droppedTab, dropTabRef);
             }
-            moveContent(tabContents[i], droppedTab.getAttribute("tabid"));
+            moveContent(tabContents[i], droppedTab.getAttribute("tabpath"));
             openTab(droppedTab);
 
             let otherTabGroup = tabDrops[(i+1)%2].children;
@@ -186,11 +186,11 @@ document.addEventListener('DOMContentLoaded', function(){
             ev.preventDefault();
         });
         tabContents[i].addEventListener("drop", function(event){
-            let droppedTab = document.querySelector(`.tab[tabid="${event.dataTransfer.getData("text")}"]`);
+            let droppedTab = document.querySelector(`.tab[tabpath="${escapePath(event.dataTransfer.getData("text"))}"]`);
             if(dropTabType == 2){
                 if(!tabDrops[i].contains(droppedTab)){
                     tabDrops[i].appendChild(droppedTab);
-                    moveContent(tabContents[i], droppedTab.getAttribute("tabid"));
+                    moveContent(tabContents[i], droppedTab.getAttribute("tabpath"));
                     openTab(droppedTab);
                 }
             }
@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 if(getElement("codearea").getAttribute("opened") == "11" || !needsSwap(dropTabType)){
                     if(!tabDrops[dropTabType].contains(droppedTab)){
                         tabDrops[dropTabType].appendChild(droppedTab);
-                        moveContent(tabContents[dropTabType], droppedTab.getAttribute("tabid"));
+                        moveContent(tabContents[dropTabType], droppedTab.getAttribute("tabpath"));
 
                         openTab(droppedTab);
 
@@ -218,8 +218,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 }
                 else{
                     getElement("codearea").setAttribute("opened", "11");
-                    moveChildren(tabDrops[dropTabType], tabDrops[(dropTabType + 1)%2], ".tab", "tabid", droppedTab.getAttribute("tabid"));
-                    moveChildren(tabContents[dropTabType], tabContents[(dropTabType + 1)%2], ".window", "tabid", droppedTab.getAttribute("tabid"));
+                    moveChildren(tabDrops[dropTabType], tabDrops[(dropTabType + 1)%2], ".tab", "tabpath", escapePath(droppedTab.getAttribute("tabpath")));
+                    moveChildren(tabContents[dropTabType], tabContents[(dropTabType + 1)%2], ".window", "tabpath", escapePath(droppedTab.getAttribute("tabpath")));
                     let otherTabGroup = tabDrops[(dropTabType + 1)%2].children;
                     let replaceOpenTab = null;
 
@@ -248,7 +248,7 @@ function beginDrag(event){
     dragging = true;
     document.body.style.userSelect = "none";
     event.dataTransfer.clearData();
-    event.dataTransfer.setData("text/plain", event.target.getAttribute("tabid"));
+    event.dataTransfer.setData("text/plain", event.target.getAttribute("tabpath"));
 }
 
 function endDrag(){
@@ -261,18 +261,18 @@ function endDrag(){
 }
 
 function openTab(tab){
-    tabsList = tab.parentElement.querySelectorAll(".tab");
-    let tabid = tab.getAttribute("tabid");
+    let tabsList = tab.parentElement.querySelectorAll(".tab");
+    let tabpath = tab.getAttribute("tabpath");
     for(let i = 0; i < tabsList.length; i++){
         if(tabsList[i] === tab){
             tabsList[i].setAttribute("selected", null);
-            document.querySelector(`.window[tabid="${tabid}"]`).setAttribute("active", null);
+            document.querySelector(`.window[tabpath="${escapePath(tabpath)}"]`).setAttribute("active", null);
         }
         else{
             if(tabsList[i].hasAttribute("selected")){
                 tabsList[i].removeAttribute("selected");
             }
-            let tabcontent = document.querySelector(`.window[tabid="${tabsList[i].getAttribute("tabid")}"]`);
+            let tabcontent = document.querySelector(`.window[tabpath="${escapePath(tabsList[i].getAttribute("tabpath"))}"]`);
             if(tabcontent.hasAttribute("active")){
                 tabcontent.removeAttribute("active");
             }
@@ -280,8 +280,8 @@ function openTab(tab){
     }
 }
 
-function moveContent(newParent, tabid){
-    elem = document.querySelector(`.window[tabid="${tabid}"]`);
+function moveContent(newParent, tabpath){
+    elem = document.querySelector(`.window[tabpath="${escapePath(tabpath)}"]`);
     if(!newParent.contains(elem)){
         newParent.appendChild(elem);
     }
@@ -324,4 +324,50 @@ function needsSwap(dropType){
         return true
     }
     return false;
+}
+
+function closeTab(tabtrigger){
+    let tab = tabtrigger.closest(".tab");
+    let tabPath = tab.getAttribute("tabpath"); 
+    let tabCorrContent = document.querySelector(`.window[tabpath="${escapePath(tabPath)}"]`);
+    let adjTab = getAdjSibling(tab, ".tab");
+
+    tab.remove();
+    tabCorrContent.remove();
+
+    if(adjTab != null){
+        openTab(adjTab);
+    }
+
+    getElement("codearea").setAttribute("opened", getOpenedWindows());
+}
+
+function closeAllTabs(){
+    for(let tabtrigger of document.querySelectorAll(".close-tab")){
+        closeTab(tabtrigger);
+    }
+}
+
+function getAdjSibling(elem, selector) {
+	let sibling = elem.previousElementSibling;
+	if (!selector) return sibling;
+	while (sibling) {
+		if (sibling.matches(selector)) return sibling;
+		sibling = sibling.previousElementSibling;
+	}
+    sibling = elem.nextElementSibling;
+	if (!selector) return sibling;
+	while (sibling) {
+		if (sibling.matches(selector)) return sibling;
+		sibling = sibling.nextElementSibling;
+	}
+    return null;
+};
+
+function setMain(codeareaClick){
+    codeareaClick.setAttribute("main", null);
+    let codeareaOther = document.querySelector(`.codearea-group:not([id="${codeareaClick.id}"])`);
+    if(codeareaOther.hasAttribute("main")){
+        codeareaOther.removeAttribute("main");
+    }
 }

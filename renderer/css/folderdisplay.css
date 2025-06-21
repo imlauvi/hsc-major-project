@@ -2,9 +2,27 @@
     width: 100%;
 }
 
-.path-name{
+.directory:not([opened]) .path-container{
+    display: none;
+}
+
+.directory[opened] > .path-container{
+    display: block;
+}
+
+.path-info{
     display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 14px;
+    background-color: var(--clr-surface-a10);
+}
+
+.path-info:hover{
+    background-color: var(--clr-surface-a20);
+}
+
+.root-directory > .path-info:not(i){
+    font-weight: 500;
 }

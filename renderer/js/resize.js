@@ -1,7 +1,3 @@
-function getElement(id){
-    return document.getElementById(id);
-}
-
 let resizing = false;
 
 document.addEventListener('selectstart', function(e) {

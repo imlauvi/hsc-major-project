@@ -11,6 +11,12 @@
     <script src="js/tabs.js"></script>
     <script src="js/main.js"></script>
     <script src="js/dropdown.js"></script>
+    <script src="js/utils.js"></script>
+
+    <script src="../node_modules/codemirror/lib/codemirror.js"></script>
+
+    <script src="../node_modules/@xterm/xterm/lib/xterm.js"></script>
+    <link rel="stylesheet" href="../node_modules/@xterm/xterm/css/xterm.css">
     <title>HSC major project</title>
 </head>
 <body>
@@ -68,55 +74,57 @@
     <div class="content" id="content">
         <div class="sidetab side" id="sidetab">
             <div class="sidetab-content" id="sidetab-content">
-                test
+                <div class="sidetab-tab" id="folder-tab">
+
+                </div>
             </div>
             <div class="sidetab-resize" id="sidetab-resize"></div>
         </div>
         <div class="main" id="main">
             <div class="codearea" id="codearea" opened="10">
-                <div class="codearea-left codearea-group" id="codearea-left" opened>
+                <div class="codearea-left codearea-group" id="codearea-left" onclick="setMain(this)" main="null" opened="null">
                     <div class="tabs" id="tabs-left">
-                        <div class="tab" id="example-tab" tabid="example" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true" selected>
+                        <div class="tab" tabpath="example" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true" selected>
                             <div class="tab-name">
                                 example
                             </div>
-                            <div class="close-tab">
+                            <div class="close-tab" onclick="closeTab(this)">
                                 &#10005;
                             </div>
                         </div>
-                        <div class="tab" id="example2-tab" tabid="example2" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true">
+                        <div class="tab" tabpath="example2" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true">
                             <div class="tab-name">
                                 example2
                             </div>
-                            <div class="close-tab">
+                            <div class="close-tab" onclick="closeTab(this)">
                                 &#10005;
                             </div>
                         </div>
-                        <div class="tab" id="example3-tab" tabid="example3" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true">
+                        <div class="tab" tabpath="example3" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true">
                             <div class="tab-name">
                                 example3
                             </div>
-                            <div class="close-tab">
+                            <div class="close-tab" onclick="closeTab(this)">
                                 &#10005;
                             </div>
                         </div>
                         <div class="tab-drop-indicator" id="tab-drop-indicator-left" ishidden="null"></div>
                     </div>
                     <div class="tab-content" id="tab-content-left">
-                        <div class="window" id="example-tab-content" tabid="example" active="null">
-                            <div class="pathinfo">
+                        <div class="window" tabpath="example" active="null">
+                            <div class="window-info">
 
                             </div>
                             test1
                         </div>
-                        <div class="window" id="example2-tab-content" tabid="example2">
-                            <div class="pathinfo">
+                        <div class="window" tabpath="example2">
+                            <div class="window-info">
 
                             </div>
                             test2
                         </div>
-                        <div class="window" id="example3-tab-content" tabid="example3">
-                            <div class="pathinfo">
+                        <div class="window" tabpath="example3">
+                            <div class="window-info">
 
                             </div>
                             test3
@@ -124,7 +132,7 @@
                     </div>
                 </div>
                 <div class="codearea-left-resize" id="codearea-left-resize"></div>
-                <div class="codearea-right codearea-group" id="codearea-right" opened>
+                <div class="codearea-right codearea-group" id="codearea-right" onclick="setMain(this)">
                     <div class="tabs" id="tabs-right">
                         <div class="tab-drop-indicator" id="tab-drop-indicator-right" ishidden="null"></div>
                     </div>

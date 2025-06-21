@@ -76,7 +76,11 @@ app.whenReady().then(() => {
         }
 
         if(fs.statSync(pathstr).isDirectory()){
-            return loadDir(pathstr);
+            return {
+                path: pathstr, 
+                type: "dir", 
+                content: loadDir(pathstr)
+            };
         }
         else{
             return fs.readFileSync(pathstr);

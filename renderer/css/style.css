@@ -200,20 +200,18 @@ body:not([dropdown-active]) .dropdown, .dropdown-trigger:not([active]) .dropdown
     width: var(--sidetab-width);
     height: calc(100% - 2px);
     display: flex;
-    position: relative;
+    /* position: relative; */
     justify-content: space-between;
     user-select: none;
     visibility: visible;
     overflow-x: hidden;
-    overflow-y: auto;
-    white-space: nowrap;
 }
 
 .sidetab-resize{
-    height: calc(100% - 4px);
+    height: calc(100% - var(--top-bar-height) - var(--bottom-bar-height) - 6px);
     margin-left: calc(var(--sidetab-width) - 2px);
     border: 2px solid var(--clr-primary-a0);
-    z-index: 1;
+    z-index: 2;
     position: absolute;
     opacity: 0;
     cursor: ew-resize;
@@ -238,6 +236,14 @@ body[resizing] .sidetab-resize:hover{
 
 .sidetab-content{
     width: 100%;
+}
+
+.sidetab-tab[id="folder-tab"]{
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: nowrap;
 }
 
 .main{
@@ -361,7 +367,7 @@ body[resizing] .sidetab-resize:hover{
 .codearea-left-resize{
     margin-left: 0;
     border: 2px solid var(--clr-primary-a0);
-    z-index: 1;
+    z-index: 2;
     position: absolute;
     opacity: 0;
     cursor: ew-resize;
@@ -384,6 +390,10 @@ body[resizing] .sidetab-resize:hover{
 
 body[resizing] .codearea-left-resize:hover{
     opacity: 0;
+}
+
+.codearea-group:not([opened]){
+    display: none;
 }
 
 .tab-content{
@@ -418,7 +428,7 @@ body[resizing] .codearea-left-resize:hover{
     transition: 0s all;
 }
 
-.pathinfo{
+.window-info{
     display: flex;
     height: var(--path-info-height);
     width: 100%;
