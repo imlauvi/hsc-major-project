@@ -178,6 +178,8 @@ document.addEventListener('DOMContentLoaded', function(){
             }
 
             getElement("codearea").setAttribute("opened", getOpenedWindows());
+
+            setMain(droppedTab.closest(".codearea-group"));
         })
     }
 
@@ -241,6 +243,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 document.documentElement.style.setProperty("--codearea-left-width", "0.5");
                 adjustCodeareaResize();
             }
+
+            setMain(droppedTab.closest(".codearea-group"));
         })
     }
 })

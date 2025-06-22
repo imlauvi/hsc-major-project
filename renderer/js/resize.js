@@ -192,6 +192,7 @@ function codeAreaResize(){ //maybe add mobile support
 function adjustCodeareaResize(){
     let style = window.getComputedStyle(document.body);
     getElement("codearea-left-resize").style.setProperty("margin-left", `${getElement("codearea-left").clientWidth - 2}px`);
+    refreshScrollCM();
 }
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -205,3 +206,10 @@ document.addEventListener('DOMContentLoaded', function(){
     })
 })
 
+function refreshScrollCM(){
+    let instances = document.querySelectorAll(`.CodeMirror`);
+    for(let instance of instances){
+        let editor = instance.CodeMirror;
+        editor.setSize("100%", "100%");
+    }
+}

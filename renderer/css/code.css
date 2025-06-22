@@ -2,3 +2,11 @@
     width: 100%;
     height: calc(100% - var(--path-info-height));
 }
+
+.CodeMirror{
+    background-color: var(--clr-surface-a20) !important;
+}
+
+.CodeMirror-gutters{
+    background-color: var(--clr-surface-a20) !important;
+}

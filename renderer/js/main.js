@@ -124,7 +124,12 @@ function constructTab(trigger){
     tabcontent.insertAdjacentHTML("beforeend", newTabContent);
     electron.loadPath(path)
         .then((res) => {
-            let view = CodeMirror.fromTextArea(document.querySelector(`.window[tabpath="${escapePath(path)}"] .code-editor`));
+            let view = CodeMirror.fromTextArea(
+                document.querySelector(`.window[tabpath="${escapePath(path)}"] .code-editor`), 
+                {
+                    lineNumbers: true
+                }
+            );
             view.getDoc().setValue(res);
             view.on("dragover", function(editor, evt){
                 evt.preventDefault();
@@ -133,6 +138,10 @@ function constructTab(trigger){
                 evt.preventDefault();
             })
             view.setSize("100%", "100%");
+            view.setOption("styleActiveLine", true);
+            view.setOption("autoCloseBrackets", true);
+            view.setOption("matchBrackets", true);
+            view.setOption("theme", "monokai");
             openTab(document.querySelector(`.tab[tabpath="${escapePath(path)}"]`));
         })
 }
