@@ -13,7 +13,7 @@
     --terminal-height-max: 400px;
     --tabs-height: 25px;
     --path-info-height: 20px;
-    --codearea-left-width: 50%;
+    --codearea-left-width: 0.5;
 }
 
 body {
@@ -259,6 +259,10 @@ body[resizing] .sidetab-resize:hover{
     background-color: var(--clr-surface-a10);
 }
 
+.tabs-content{
+    position: relative;
+}
+
 .tab{
     display: flex;
     height: 100%;
@@ -328,7 +332,7 @@ body[resizing] .sidetab-resize:hover{
 }
 
 .codearea-left{
-    width: var(--codearea-left-width);
+    width: calc(var(--codearea-left-width) * 100%);
     border-right: 1px solid var(--clr-surface-a30);
     height: 100%;
     max-width: calc(100% - 50px);
@@ -347,7 +351,7 @@ body[resizing] .sidetab-resize:hover{
 }
 
 .codearea-right{
-    width: calc(100% - var(--codearea-left-width));
+    width: calc(100% - 100% * var(--codearea-left-width));
     height: 100%;
     max-width: calc(100% - 50px);
     min-width: 50px;
@@ -402,8 +406,19 @@ body[resizing] .codearea-left-resize:hover{
 
 .window{
     position: absolute;
-    height: 100%;
-    width: 100%;
+    height: calc(100% - var(--top-bar-height) - var(--terminal-height) - var(--bottom-bar-height) - var(--tabs-height) + 4px);
+}
+
+.codearea-left .window{
+    width: calc(var(--codearea-left-width) * (100% - var(--side-bar-width) - var(--sidetab-width)));
+}
+
+.codearea-right .window{
+    width: calc((1 - var(--codearea-left-width)) * (100% - var(--side-bar-width) - var(--sidetab-width)));
+}
+
+.codearea:not([opened="11"]) .window{
+    width: calc(100% - var(--side-bar-width) - var(--sidetab-width));
 }
 
 .window:not([active]){

@@ -186,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function(){
             ev.preventDefault();
         });
         tabContents[i].addEventListener("drop", function(event){
+            let initialWindows = getOpenedWindows();
             let droppedTab = document.querySelector(`.tab[tabpath="${escapePath(event.dataTransfer.getData("text"))}"]`);
             if(dropTabType == 2){
                 if(!tabDrops[i].contains(droppedTab)){
@@ -236,8 +237,8 @@ document.addEventListener('DOMContentLoaded', function(){
             }
             
             getElement("codearea").setAttribute("opened", getOpenedWindows());
-            if(getOpenedWindows != "11"){
-                document.documentElement.style.setProperty("--codearea-left-width", "50%");
+            if(getOpenedWindows() != initialWindows){
+                document.documentElement.style.setProperty("--codearea-left-width", "0.5");
                 adjustCodeareaResize();
             }
         })

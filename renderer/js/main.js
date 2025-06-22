@@ -115,10 +115,24 @@ function constructTab(trigger){
             <div class="window-info">
                 ${path.replace(rootDir+"\\", "")}
             </div>
-            <div class="code-wrapper"></div>
+            <div class="code-wrapper"">
+                <textarea class="code-editor"></textarea>
+            </div>
         </div>
     `
     tabGroup.insertAdjacentHTML("beforeend", newTab);
     tabcontent.insertAdjacentHTML("beforeend", newTabContent);
-    openTab(document.querySelector(`.tab[tabpath="${escapePath(path)}"]`));
+    electron.loadPath(path)
+        .then((res) => {
+            let view = CodeMirror.fromTextArea(document.querySelector(`.window[tabpath="${escapePath(path)}"] .code-editor`));
+            view.getDoc().setValue(res);
+            view.on("dragover", function(editor, evt){
+                evt.preventDefault();
+            });
+            view.on("drop", function(editor, evt){
+                evt.preventDefault();
+            })
+            view.setSize("100%", "100%");
+            openTab(document.querySelector(`.tab[tabpath="${escapePath(path)}"]`));
+        })
 }

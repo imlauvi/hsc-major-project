@@ -166,8 +166,8 @@ function codeAreaResize(){ //maybe add mobile support
         
         let size = event.clientX - parseInt(style.getPropertyValue("--side-bar-width")) - parseInt(style.getPropertyValue("--sidetab-width"));
         sizeClamp = Math.min(getElement("codearea").clientWidth - 50, Math.max(size, 50));
-        sizeProportion = (sizeClamp / getElement("codearea").clientWidth) * 100;
-        document.documentElement.style.setProperty("--codearea-left-width", `${sizeProportion}%`);
+        sizeProportion = (sizeClamp / getElement("codearea").clientWidth);
+        document.documentElement.style.setProperty("--codearea-left-width", `${sizeProportion}`);
 
         adjustCodeareaResize();
     }

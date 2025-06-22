@@ -83,7 +83,7 @@ app.whenReady().then(() => {
             };
         }
         else{
-            return fs.readFileSync(pathstr);
+            return fs.readFileSync(pathstr, "utf8");
         }
     });
 
