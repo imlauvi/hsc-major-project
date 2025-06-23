@@ -1,3 +1,8 @@
+const exttolang = {
+    ".py": "python",
+    ".js": "javascript",
+}
+
 async function openFolder(){
     const dialogConfig = {
         title: 'Select a folder',
@@ -7,20 +12,20 @@ async function openFolder(){
     electron.openDialog('showOpenDialog', dialogConfig)
         .then(async (result) => {
             if(!result.canceled){
+                closeAllTabs();
                 rootDir = result.filePaths[0];
                 getElement("folder-tab").innerHTML = "";
-                loadPath(rootDir)
+                if(document.body.hasAttribute("dropdown-active")){
+                    document.body.removeAttribute("dropdown-active");
+                    for(let trigger of document.querySelectorAll(".dropdown-trigger")){
+                        if(trigger.hasAttribute("active")){
+                            trigger.removeAttribute("active");
+                        }
+                    }
+                }
+                electron.loadPath(rootDir)
                     .then(async (pathloaded) => {
                         getElement("folder-tab").innerHTML = constructDir(pathloaded, 0, true);
-                        if(document.body.hasAttribute("dropdown-active")){
-                            document.body.removeAttribute("dropdown-active");
-                            for(let trigger of document.querySelectorAll(".dropdown-trigger")){
-                                if(trigger.hasAttribute("active")){
-                                    trigger.removeAttribute("active");
-                                }
-                            }
-                        }
-                        closeAllTabs();
                     })
             }
         });
@@ -34,7 +39,7 @@ async function loadPath(dirName){
 function constructDir(dir, padding, root){
     if(root){
         dirhtml = `
-            <div class="directory root-directory path-container" path="${dir.path}">
+            <div class="directory root-directory path-container" path="${dir.path}" ondragover="dragoverFile(event)" ondrop="dropFile(event, this)">
                 <span class="path-info directory-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px);">
                     <i class="bx bx-chevron-right" onclick="toggleDir(this)"></i>
                     ${dir.path.split("\\").pop()}
@@ -44,8 +49,8 @@ function constructDir(dir, padding, root){
     }
     else{
         dirhtml = `
-            <div class="directory path-container" path="${dir.path}">
-                <span class="path-info directory-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px);">
+            <div class="directory path-container" path="${dir.path}" ondragover="dragoverFile(event)" ondrop="dropFile(event, this)">
+                <span class="path-info directory-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px);" ondragstart="beginFileDrag(event)" ondragend="endFileDrag()" draggable="true">
                     <i class="bx bx-chevron-right" onclick="toggleDir(this)"></i>
                     ${dir.path.split("\\").pop()}
                 </span>
@@ -67,7 +72,7 @@ function constructDir(dir, padding, root){
 function constructFile(file, padding){
     filehtml = `
         <div class="file path-container" path="${file.path}" ext="${file.ext}" onclick="constructTab(this)">
-            <span class="path-info file-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px);">${file.path.split("\\").pop()}</span>
+            <span class="path-info file-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px);" ondragstart="beginFileDrag(event)" ondragend="endFileDrag()" draggable="true">${file.path.split("\\").pop()}</span>
         </div>
     `
     return filehtml;
@@ -87,6 +92,7 @@ function toggleDir(trigger){
 
 function constructTab(trigger){
     let path = trigger.getAttribute("path");
+    let ext = trigger.getAttribute("ext");
     if(getElement("codearea").getAttribute("opened") == "00"){
         getElement("codearea").setAttribute("opened", "10");
         getElement("codearea-left").setAttribute("opened", null);
@@ -142,6 +148,10 @@ function constructTab(trigger){
             view.setOption("autoCloseBrackets", true);
             view.setOption("matchBrackets", true);
             view.setOption("theme", "monokai");
+            if(ext in exttolang){
+                view.setOption("mode", exttolang[ext]);
+                console.log(ext);
+            }
             openTab(document.querySelector(`.tab[tabpath="${escapePath(path)}"]`));
         })
 }

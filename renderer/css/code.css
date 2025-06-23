@@ -1,6 +1,10 @@
 .code-wrapper{
     width: 100%;
-    height: calc(100% - var(--path-info-height));
+    height: calc(100% - var(--path-info-height) - 2px);
+}
+
+.codearea-left .code-wrapper{
+    width: calc(100% - 1px);
 }
 
 .CodeMirror{

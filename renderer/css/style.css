@@ -337,6 +337,7 @@ body[resizing] .sidetab-resize:hover{
     height: 100%;
     max-width: calc(100% - 50px);
     min-width: 50px;
+    overflow: hidden;
 }
 
 .codearea[opened="10"] .codearea-left{
@@ -377,7 +378,7 @@ body[resizing] .sidetab-resize:hover{
     cursor: ew-resize;
     transition: opacity 0.2s;
     visibility: hidden;
-    height: calc(100% - var(--terminal-height) - var(--tabs-height) - var(--path-info-height) - 15px); /*this shouldnt work but it does i have no idea why*/
+    height: calc(100% - var(--terminal-height) - var(--tabs-height) - var(--path-info-height) - 14px); /*this shouldnt work but it does i have no idea why*/
 }
 
 .codearea[opened="11"] .codearea-left-resize{
@@ -448,6 +449,7 @@ body[resizing] .codearea-left-resize:hover{
     height: var(--path-info-height);
     width: 100%;
     border-bottom: 1px solid var(--clr-surface-a30);
+    overflow: hidden;
 }
 
 .terminal{
@@ -456,7 +458,7 @@ body[resizing] .codearea-left-resize:hover{
     background-color: var(--clr-surface-a10);
     border-top: 1px solid var(--clr-surface-a30);
     visibility: visible;
-    z-index: 1;
+    z-index: 2;
 }
 
 .terminal[full=true]{

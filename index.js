@@ -2,7 +2,7 @@
 
 const { ipcMain, dialog, app, BrowserWindow } = require('electron')
 const path = require('path')
-const fs = require("node:fs")
+const fs = require("fs-extra")
 
 let win
 
@@ -79,7 +79,7 @@ app.whenReady().then(() => {
             return {
                 path: pathstr, 
                 type: "dir", 
-                content: loadDir(pathstr)
+                content: await loadDir(pathstr)
             };
         }
         else{
@@ -95,16 +95,11 @@ app.whenReady().then(() => {
             throw Error("Path already exists");
         }
 
-        if(fs.statSync(oldPath).isFile()){
-            try{
-                fs.renameSync(oldPath, newPath);
-            }
-            catch(err){
-                throw err
-            }
+        try{
+            fs.moveSync(oldPath, newPath);
         }
-        else{
-
+        catch(err){
+            throw err
         }
     })
 
@@ -139,8 +134,8 @@ app.whenReady().then(() => {
     })
 });
 
-function loadDir(pathstr){
-    let dir = fs.readdirSync(pathstr);
+async function loadDir(pathstr){
+    let dir = await fs.promises.readdir(pathstr);
     let dircontents = [];
     for(let contentpath of dir){
         fullpath = path.join(pathstr, contentpath);
@@ -159,7 +154,7 @@ function loadDir(pathstr){
                 {
                     path: fullpath, 
                     type: "dir", 
-                    content: loadDir(fullpath)
+                    content: await loadDir(fullpath)
                 }
             );
         }

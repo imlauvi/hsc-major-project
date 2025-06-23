@@ -1,4 +1,4 @@
-let dragging = true;
+let dragging = false;
 let withinDisplayDrop = true;
 let withinTabDrop = 0;
 let dropTabGroup;
@@ -118,10 +118,16 @@ function setTabDropIndicator(event){
 
 document.addEventListener('DOMContentLoaded', function(){
     getElement("codearea").addEventListener("dragover", function(event){
+        if(!dragging){
+            return;
+        }
         dropTabType = getDropTab(event);
     })
 
     document.addEventListener("dragover", function(event){
+        if(!dragging){
+            return;
+        }
         let style = window.getComputedStyle(document.body);
         let posX = event.clientX - parseInt(style.getPropertyValue("--side-bar-width")) - parseInt(style.getPropertyValue("--sidetab-width"));
         let posY = event.clientY - parseInt(style.getPropertyValue("--top-bar-height"));
@@ -146,6 +152,9 @@ document.addEventListener('DOMContentLoaded', function(){
     })
 
     document.addEventListener("dragover", function(event){
+        if(!dragging){
+            return;
+        }
         setTabDropIndicator(event);
     });
 
@@ -156,7 +165,13 @@ document.addEventListener('DOMContentLoaded', function(){
             ev.preventDefault();
         });
         tabDrops[i].addEventListener("drop", function(event){
+            if(!dragging){
+                return;
+            }
             let droppedTab = document.querySelector(`.tab[tabpath="${escapePath(event.dataTransfer.getData("text"))}"]`);
+            if(!droppedTab){
+                return;
+            }
             if(!dropTabRef){
                 tabDrops[i].appendChild(droppedTab);
             }
@@ -188,8 +203,14 @@ document.addEventListener('DOMContentLoaded', function(){
             ev.preventDefault();
         });
         tabContents[i].addEventListener("drop", function(event){
+            if(!dragging){
+                return;
+            }
             let initialWindows = getOpenedWindows();
             let droppedTab = document.querySelector(`.tab[tabpath="${escapePath(event.dataTransfer.getData("text"))}"]`);
+            if(!droppedTab){
+                return;
+            }
             if(dropTabType == 2){
                 if(!tabDrops[i].contains(droppedTab)){
                     tabDrops[i].appendChild(droppedTab);
@@ -344,7 +365,13 @@ function closeTab(tabtrigger){
         openTab(adjTab);
     }
 
-    getElement("codearea").setAttribute("opened", getOpenedWindows());
+    let openedWindows = getOpenedWindows();
+
+    getElement("codearea").setAttribute("opened", openedWindows);
+
+    if(openedWindows != "11" && openedWindows != "00"){
+        setMain(document.querySelector(".codearea-group[opened]"));
+    }
 }
 
 function closeAllTabs(){

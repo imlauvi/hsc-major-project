@@ -23,6 +23,14 @@
     background-color: var(--clr-surface-a20);
 }
 
+body[dragfile] .path-info{
+    background-color: var(--clr-surface-a10) !important;
+}
+
 .root-directory > .path-info:not(i){
     font-weight: 500;
+}
+
+.directory[isover] .path-info{
+    background-color: var(--clr-surface-a20) !important;
 }
