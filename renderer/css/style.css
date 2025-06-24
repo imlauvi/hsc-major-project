@@ -80,7 +80,7 @@ ul{
     background-color: var(--clr-surface-a10);
     border-radius: 2px;
     border: 1px solid var(--clr-surface-a30);
-    z-index: 2;
+    z-index: 3;
     left: 0;
     top: 8px;
     padding: 4px;

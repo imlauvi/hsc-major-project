@@ -104,16 +104,23 @@ app.whenReady().then(() => {
     })
 
     ipcMain.handle('writeFile', (event, pathstr, content) => {
-        if(!fs.existsSync(pathstr)){
-            throw Error("Path not found");
-        }
-
-        if(fs.statSync(pathstr).isDirectory()){
-            throw Error("Cannot write to directory")
+        if(fs.existsSync(pathstr)){
+            if(fs.statSync(pathstr).isDirectory()){
+                throw Error("Cannot write to directory")
+            }
         }
 
         try{
-            fs.writeFileSync(pathstr, content);
+            fs.writeFileSync(pathstr, content, "utf8");
+        } 
+        catch(err){
+            throw err
+        }
+    })
+
+    ipcMain.handle('createDir', (event, pathstr) => {
+        try{
+            fs.mkdirSync(pathstr);
         } 
         catch(err){
             throw err

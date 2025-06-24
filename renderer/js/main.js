@@ -41,8 +41,10 @@ function constructDir(dir, padding, root){
         dirhtml = `
             <div class="directory root-directory path-container" path="${dir.path}" ondragover="dragoverFile(event)" ondrop="dropFile(event, this)">
                 <span class="path-info directory-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px);">
-                    <i class="bx bx-chevron-right" onclick="toggleDir(this)"></i>
-                    ${dir.path.split("\\").pop()}
+                    <i class="dir-indicator bx bx-chevron-right" onclick="toggleDir(this)"></i>
+                    <span class="info-name">
+                        ${dir.path.split("\\").pop()}
+                    </span>
                 </span>
                 <div class="directory-content">
         `
@@ -50,9 +52,24 @@ function constructDir(dir, padding, root){
     else{
         dirhtml = `
             <div class="directory path-container" path="${dir.path}" ondragover="dragoverFile(event)" ondrop="dropFile(event, this)">
-                <span class="path-info directory-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px);" ondragstart="beginFileDrag(event)" ondragend="endFileDrag()" draggable="true">
-                    <i class="bx bx-chevron-right" onclick="toggleDir(this)"></i>
-                    ${dir.path.split("\\").pop()}
+                <div class="context-menu">
+                    <span class="context-menu-item" onclick="createNew(this, 'file')">Create file</span>
+                    <span class="context-menu-item" onclick="createNew(this, 'dir')">Create folder</span>
+                    <hr class="context-menu-separator">
+                    <span class="context-menu-item" onclick="openRename(this)">Rename</span>
+                    <span class="context-menu-item" onclick="deletePath(this)">Delete</span>
+                </div>
+                <span class="path-info directory-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px);" oncontextmenu="openFileMenu(event, this)" ondragstart="beginFileDrag(event)" ondragend="endFileDrag()" draggable="true">
+                    <i class="dir-indicator bx bx-chevron-right" onclick="toggleDir(this)"></i>
+                    <span class="info-name">
+                        ${dir.path.split("\\").pop()}
+                    </span>
+                    <span class="rename">
+                        <input type="text" class="rename-input" style="width:calc(100% - ${padding}px - 14px)" onkeyup="triggerRename(event, this)" onfocusout="rename(this)">
+                        <div class="rename-warning" style="width:calc(var(--sidetab-width) - ${padding}px - 19px)">
+                            test
+                        </div>
+                    </span>
                 </span>
                 <div class="directory-content">
         `
@@ -71,8 +88,22 @@ function constructDir(dir, padding, root){
 
 function constructFile(file, padding){
     filehtml = `
-        <div class="file path-container" path="${file.path}" ext="${file.ext}" onclick="constructTab(this)">
-            <span class="path-info file-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px);" ondragstart="beginFileDrag(event)" ondragend="endFileDrag()" draggable="true">${file.path.split("\\").pop()}</span>
+        <div class="file path-container" path="${file.path}" ext="${file.ext}">
+            <div class="context-menu">
+                <span class="context-menu-item" onclick="openRename(this)">Rename</span>
+                <span class="context-menu-item" onclick="deletePath(this)">Delete</span>
+            </div>
+            <span class="path-info file-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px);" oncontextmenu="openFileMenu(event, this)" ondragstart="beginFileDrag(event)" ondragend="endFileDrag()" draggable="true">
+                <span class="info-name" onclick="constructTab(this.parentElement.parentElement)">
+                    ${file.path.split("\\").pop()}
+                </span>
+                <span class="rename">
+                    <input type="text" class="rename-input" style="width:calc(100% - 6px)" onkeyup="triggerRename(event, this)" onfocusout="rename(this)">
+                    <div class="rename-warning" style="width:calc(var(--sidetab-width) - ${padding}px - 2px)">
+                        test
+                    </div>
+                </span>
+            </span>
         </div>
     `
     return filehtml;
@@ -82,11 +113,11 @@ function toggleDir(trigger){
     let dir = trigger.closest(".directory");
     if(dir.hasAttribute("opened")){
         dir.removeAttribute("opened");
-        trigger.className = "bx bx-chevron-right";
+        trigger.className = "dir-indicator bx bx-chevron-right";
     }
     else{
         dir.setAttribute("opened", null);
-        trigger.className = "bx bx-chevron-down";
+        trigger.className = "dir-indicator bx bx-chevron-down";
     }
 }
 
@@ -150,8 +181,16 @@ function constructTab(trigger){
             view.setOption("theme", "monokai");
             if(ext in exttolang){
                 view.setOption("mode", exttolang[ext]);
-                console.log(ext);
             }
             openTab(document.querySelector(`.tab[tabpath="${escapePath(path)}"]`));
         })
 }
+
+document.addEventListener("DOMContentLoaded", function(){
+    closeAllTabs();
+    getElement("folder-tab").innerHTML = "";
+    electron.loadPath("C:\\Users\\leviz\\OneDrive\\Desktop\\hsc-major-project-testing")
+        .then(async (pathloaded) => {
+            getElement("folder-tab").innerHTML = constructDir(pathloaded, 0, true);
+        })
+})

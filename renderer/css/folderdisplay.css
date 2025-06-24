@@ -10,6 +10,13 @@
     display: block;
 }
 
+.dir-indicator{
+    margin: 0;
+    width: 10px;
+    height: 10px;
+    padding: 2px;
+}
+
 .path-info{
     display: block;
     white-space: nowrap;
@@ -33,4 +40,97 @@ body[dragfile] .path-info{
 
 .directory[isover] .path-info{
     background-color: var(--clr-surface-a20) !important;
+}
+
+.context-menu{
+    position: absolute;
+    width: 100px;
+    background-color: var(--clr-surface-a10);
+    border-radius: 2px;
+    border: 1px solid var(--clr-surface-a30);
+    z-index: 3;
+    padding: 4px;
+    font-size: 14px;
+    line-height: 14px;
+}
+
+.context-menu:not([opened]){
+    display: none;
+}
+
+.context-menu-item{
+    display: block;
+    padding-inline: 8px;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    border-radius: 2px;
+}
+
+.context-menu-item + .context-menu-item{
+    margin-top: 3px;
+}
+
+.context-menu-item:hover{
+    background-color: var(--clr-primary-a0);
+}
+
+.context-menu-separator{
+    border: none;
+    border-bottom: 1px solid var(--clr-surface-a30);
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.path-container:not([renaming]) > .path-info > .rename{
+    display: none;
+}
+
+.path-container[renaming] > .path-info > .info-name{
+    display: none;
+}
+
+.rename-warning{
+    position: absolute;
+    white-space: wrap;
+    z-index: 2;
+    background-color: var(--clr-other-error-red-dark);
+    border: 1px solid var(--clr-other-error-red-light);
+    border-radius: 2px;
+}
+
+.directory > .path-info > .rename > .rename-warning{
+    margin-left: 17px;
+}
+
+.rename:not([iserror]) .rename-warning, .create-new:not([iserror]) .create-new-warning{
+    visibility: hidden;
+}
+
+.rename-input, .create-new-input{
+    background-color: var(--clr-surface-a10);
+    color: var(--clr-light-a0);
+    height: 13px;
+    border: none;
+}
+
+.rename-input:focus, .create-new-input:focus{
+    outline: 1px solid var(--clr-primary-a0);
+    border: none;
+}
+
+.create-new{
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    border: none;
+    font-size: 14px;
+}
+
+.create-new-warning{
+    position: absolute;
+    white-space: wrap;
+    z-index: 2;
+    background-color: var(--clr-other-error-red-dark);
+    border: 1px solid var(--clr-other-error-red-light);
+    border-radius: 2px;
 }

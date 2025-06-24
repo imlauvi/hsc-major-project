@@ -15,6 +15,12 @@ document.addEventListener("DOMContentLoaded", function(){
             }
         }
     });
+
+    document.documentElement.addEventListener("contextmenu", function(event){
+        if(document.body.hasAttribute("dropdown-active")){
+            document.body.removeAttribute("dropdown-active");
+        }
+    })
 })
 
 function setDropdown(dropdownTrigger, event){
