@@ -93,7 +93,9 @@ function renameFile(path, oldPathSeg, newPathSeg, newInd){
 
     if(openedTab && openedWindow){
         openedTab.setAttribute("tabpath", path.replace(oldPathSeg, newPathSeg));
+        openedTab.querySelector(".tab-name").textContent = path.replace(oldPathSeg, newPathSeg).split("\\").pop();
         openedWindow.setAttribute("tabpath", path.replace(oldPathSeg, newPathSeg));
+        openedWindow.querySelector(".window-info").textContent = path.replace(oldPathSeg, newPathSeg).replace(rootDir+"\\", "");
     }
 }
 
@@ -220,13 +222,14 @@ function rename(trigger){
     }
 
     let newPath = pathContainer.parentElement.closest(".path-container").getAttribute("path");
+    let pathInfo = pathContainer.querySelector(".path-info");
     newPath += `\\${trigger.value}`;
     let currPath = pathContainer.getAttribute("path");
     if(pathContainer.matches(".directory")){
-        renameDir(currPath, currPath, newPath, parseInt(pathContainer.style.paddingLeft));
+        renameDir(currPath, currPath, newPath, parseInt(pathInfo.style.paddingLeft));
     }
     else{
-        renameFile(currPath, currPath, newPath, parseInt(pathContainer.style.paddingLeft));
+        renameFile(currPath, currPath, newPath, parseInt(pathInfo.style.paddingLeft));
     }
     pathContainer.querySelector(".info-name").textContent = trigger.value;
     electron.renamePath(currPath, newPath);
@@ -237,7 +240,7 @@ function getValidRename(renameInput){
     if(newName === ""){
         return "New file/folder name must not be empty"
     }
-    if(!validateFilename.test(newName) && !/^[a-zA-Z]+$/.test(newName)){
+    if(!validateFilename.test(newName) && !(/^[a-zA-Z]+$/.test(newName))){
         return "Invalid file/folder name"
     }
     let renameContainer = renameInput.closest(".path-container");
