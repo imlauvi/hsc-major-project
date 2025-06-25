@@ -41,7 +41,7 @@ function sideTabResize(){ //maybe add mobile support
         if(!resizing){
             return;
         }
-        
+        setTermWidth();
         document.documentElement.style.setProperty("--sidetab-width-max", `${getElement("content").clientWidth - getElement("sidenav").clientWidth - 100}px`)
 
         document.body.style.cursor = "ew-resize";
@@ -97,7 +97,7 @@ function terminalResize(){ //maybe add mobile support
         if(!resizing){
             return;
         }
-
+        setTermWidth();
         document.documentElement.style.setProperty("--terminal-height-max", `${getElement("main").clientHeight - 100}px`)
         
         document.body.style.cursor = "ns-resize";

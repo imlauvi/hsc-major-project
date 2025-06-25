@@ -30,11 +30,15 @@
     background-color: var(--clr-surface-a20);
 }
 
+.root-directory > .path-info-wrapper > .path-info:hover{
+    background-color: var(--clr-surface-a10);
+}
+
 body[dragfile] .path-info{
     background-color: var(--clr-surface-a10) !important;
 }
 
-.root-directory > .path-info:not(i){
+.root-directory > .path-info-wrapper > .path-info:not(i){
     font-weight: 500;
 }
 
@@ -109,7 +113,8 @@ body[dragfile] .path-info{
 .rename-input, .create-new-input{
     background-color: var(--clr-surface-a10);
     color: var(--clr-light-a0);
-    height: 13px;
+    height: 12px;
+    top: 0;
     border: none;
 }
 
@@ -124,6 +129,7 @@ body[dragfile] .path-info{
     overflow: hidden;
     border: none;
     font-size: 14px;
+    height: 16px;
 }
 
 .create-new-warning{
@@ -133,4 +139,27 @@ body[dragfile] .path-info{
     background-color: var(--clr-other-error-red-dark);
     border: 1px solid var(--clr-other-error-red-light);
     border-radius: 2px;
+    margin-top: -2px;
+}
+
+.create-icon{
+    padding: 2px;
+    border-radius: 2px;
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    margin-left: -2px;
+}
+
+.create-icon:hover{
+    background-color: var(--clr-surface-a20);
+}
+
+.path-info-wrapper{
+    display: flex;
+    white-space: nowrap;
+}
+
+.xterm-screen{
+    z-index: 1;
 }

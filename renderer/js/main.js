@@ -25,6 +25,7 @@ async function openFolder(){
                 }
                 electron.loadPath(rootDir)
                     .then(async (pathloaded) => {
+                        electron.loadTerm(pathloaded.path);
                         getElement("folder-tab").innerHTML = constructDir(pathloaded, 0, true);
                     })
             }
@@ -40,10 +41,16 @@ function constructDir(dir, padding, root){
     if(root){
         dirhtml = `
             <div class="directory root-directory path-container" path="${dir.path}" ondragover="dragoverFile(event)" ondrop="dropFile(event, this)">
-                <span class="path-info directory-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px);">
-                    <i class="dir-indicator bx bx-chevron-right" onclick="toggleDir(this)"></i>
-                    <span class="info-name">
-                        ${dir.path.split("\\").pop()}
+                <span class="path-info-wrapper">
+                    <span class="path-info directory-info" style="padding-left:${padding}px; width:calc(100% - ${padding}px - 40px);">
+                        <i class="dir-indicator bx bx-chevron-right" onclick="toggleDir(this)"></i>
+                        <span class="info-name">
+                            ${dir.path.split("\\").pop()}
+                        </span>
+                    </span>
+                    <span class="root-buttons">
+                        <i class="create-icon bx bx-file" onclick="createNew(this, 'file')"></i>
+                        <i class="create-icon bx bx-folder" onclick="createNew(this, 'dir')"></i>
                     </span>
                 </span>
                 <div class="directory-content">
@@ -152,7 +159,7 @@ function constructTab(trigger){
             <div class="window-info">
                 ${path.replace(rootDir+"\\", "")}
             </div>
-            <div class="code-wrapper"">
+            <div class="code-wrapper" onkeydown="editCode(event)">
                 <textarea class="code-editor"></textarea>
             </div>
         </div>
@@ -191,6 +198,28 @@ document.addEventListener("DOMContentLoaded", function(){
     getElement("folder-tab").innerHTML = "";
     electron.loadPath("C:\\Users\\leviz\\OneDrive\\Desktop\\hsc-major-project-testing")
         .then(async (pathloaded) => {
+            electron.loadTerm(pathloaded.path);
             getElement("folder-tab").innerHTML = constructDir(pathloaded, 0, true);
         })
 })
+
+function editCode(event){
+    let editFile = event.target.closest(".window");
+    let path = editFile.getAttribute("tabpath");
+    let corrTab = document.querySelector(`.tab[tabpath="${escapePath(path)}"]`)
+    if(event.ctrlKey && event.key == "s"){
+        if(editFile.hasAttribute("edited")){
+            editFile.removeAttribute("edited");
+        }
+        if(corrTab.hasAttribute("edited")){
+            corrTab.removeAttribute("edited");
+        }
+        let cm = editFile.querySelector(".CodeMirror").CodeMirror;
+        let content = cm.getValue();
+        electron.writeFile(path, content);
+    }
+    else if(/^.$/u.test(event.key)){
+        editFile.setAttribute("edited", null);
+        corrTab.setAttribute("edited", null);
+    }
+}

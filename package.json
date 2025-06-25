@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
     "body-parser": "^1.20.3",
     "codemirror": "^5.65.19",
@@ -17,12 +18,16 @@
     "drag-tabs": "^2.3.1",
     "express": "^4.21.2",
     "fs-extra": "^11.3.0",
+    "node-gyp": "^11.2.0",
     "node-modules": "^0.0.1",
+    "node-pty": "^1.1.0-beta34",
     "path": "^0.12.7",
     "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "xterm-addon-fit": "^0.8.0"
   },
   "devDependencies": {
-    "electron": "^34.3.0"
+    "electron": "^34.3.0",
+    "electron-rebuild": "^3.2.9"
   }
 }

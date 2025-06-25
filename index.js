@@ -3,8 +3,14 @@
 const { ipcMain, dialog, app, BrowserWindow } = require('electron')
 const path = require('path')
 const fs = require("fs-extra")
+const pty = require("node-pty");
+const os = require("os");
 
-let win
+
+let win;
+let ptyProcess;
+let shell = os.platform() === "win32" ? "powershell.exe" : "bash"
+
 
 function createWindow () {
     // Create the browser window.
@@ -22,7 +28,6 @@ function createWindow () {
         height: 600,
         icon: path.join(__dirname, 'renderer/icons/icon.png'),
         webPreferences: {
-            nodeIntegration: true,
             contextIsolation: true,
             devTools: true,
             preload: path.join(__dirname, "preload.js")
@@ -138,6 +143,31 @@ app.whenReady().then(() => {
         else{
             fs.unlinkSync(pathstr);
         }
+    })
+
+    ptyProcess = pty.spawn(shell, [], {
+        cwd: process.env.HOME,
+        env: process.env
+    })
+
+    ptyProcess.on("data", function(data){
+        win.webContents.send("term.incoming", data);
+    })
+
+    ipcMain.handle("term.keystroke", (event, key) => {
+        ptyProcess.write(key);
+    })
+
+    ipcMain.handle("term.reload", (event, pathstr) => {
+        let cdpath = pathstr.replace("C:\\", "");
+        ptyProcess.write("\r");
+        ptyProcess.write("cd /\r");
+        ptyProcess.write(`cd ${cdpath}\r`);
+        ptyProcess.write("\r");
+    })
+
+    ipcMain.handle("term.resize", (event, termX, termY) => {
+        ptyProcess.resize(termX, termY);
     })
 });
 

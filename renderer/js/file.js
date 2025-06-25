@@ -263,13 +263,16 @@ function getValidRename(renameInput){
 
 function createNew(trigger, type){
     let dirFrom = trigger.closest(".directory");
-    trigger.parentElement.removeAttribute("opened")
+    if(trigger.parentElement.hasAttribute("opened")){
+        trigger.parentElement.removeAttribute("opened");
+    }
+    dirFrom.setAttribute("opened", null);
     let padding = dirFrom.querySelector(".path-info").style.paddingLeft;
     let htmlString;
     if(type == "dir"){
         htmlString = `
             <span class="create-new" style="padding-left:calc(${padding} + 10px)" iserror>
-                <input type="text" createType="dir" class="create-new-input" style="width:calc(var(--sidetab-width) - ${padding} - 15px)" onkeyup="checkNewPath(event, this)" onfocusout="createNewPath(this, 'dir', ${parseInt(padding) + 10})">
+                <input type="text" createType="dir" class="create-new-input" style="width:calc(var(--sidetab-width) - ${padding} - 16px)" onkeyup="checkNewPath(event, this)" onfocusout="createNewPath(this, 'dir', ${parseInt(padding) + 10})">
                 <div class="create-new-warning" style="width:calc(var(--sidetab-width) - ${padding} - 12px)">
                     New file/folder name must not be empty
                 </div>
@@ -279,7 +282,7 @@ function createNew(trigger, type){
     else{
         htmlString = `
             <span class="create-new" style="padding-left:calc(${padding} + 10px)" iserror>
-                <input type="text" createType="file" class="create-new-input" style="width:calc(var(--sidetab-width) - ${padding} - 15px)" onkeyup="checkNewPath(event, this)" onfocusout="createNewPath(this, 'file', ${parseInt(padding) + 10})">
+                <input type="text" createType="file" class="create-new-input" style="width:calc(var(--sidetab-width) - ${padding} - 16px)" onkeyup="checkNewPath(event, this)" onfocusout="createNewPath(this, 'file', ${parseInt(padding) + 10})">
                 <div class="create-new-warning" style="width:calc(var(--sidetab-width) - ${padding} - 12px)">
                     New file/folder name must not be empty
                 </div>

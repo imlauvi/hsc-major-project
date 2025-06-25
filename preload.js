@@ -8,4 +8,8 @@ contextBridge.exposeInMainWorld('electron', {
     createFile: (path) => ipcRenderer.invoke('writeFile', path, ""),
     createDir: (path) => ipcRenderer.invoke('createDir', path),
     deletePath: (path) => ipcRenderer.invoke('deletePath', path),
+    sendTermKeystroke: (key) => ipcRenderer.invoke('term.keystroke', key),
+    loadTerm: (path) => ipcRenderer.invoke('term.reload', path),
+    resizeTerm: (termX, termY) => ipcRenderer.invoke('term.resize', termX, termY),
+    onTermIncoming: (callback) => ipcRenderer.on("term.incoming", (event, data) => callback(data)),
 });
