@@ -78,18 +78,18 @@ body[dragfile] .path-info{
     background-color: var(--clr-primary-a0);
 }
 
-.context-menu-separator{
+.menu-separator{
     border: none;
     border-bottom: 1px solid var(--clr-surface-a30);
     margin-top: 3px;
     margin-bottom: 3px;
 }
 
-.path-container:not([renaming]) > .path-info > .rename{
+.path-container:not([renaming]) > .path-info .rename{
     display: none;
 }
 
-.path-container[renaming] > .path-info > .info-name{
+.path-container[renaming] > .path-info .info-name{
     display: none;
 }
 
@@ -132,6 +132,11 @@ body[dragfile] .path-info{
     height: 16px;
 }
 
+.create-new-input-wrapper{
+    border-left: 1px solid var(--clr-surface-a30);
+    padding-left: 5px;
+}
+
 .create-new-warning{
     position: absolute;
     white-space: wrap;
@@ -160,6 +165,15 @@ body[dragfile] .path-info{
     white-space: nowrap;
 }
 
-.xterm-screen{
-    z-index: 1;
+.file > .path-info > .info-wrapper > .info-name{
+    width: 100% !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.path-container:not(.root-directory) .info-wrapper{
+    padding-left: 5px;
+    display: flex;
+    border-left: 1px solid var(--clr-surface-a30);
 }

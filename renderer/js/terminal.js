@@ -1,5 +1,8 @@
 let term;
+let isenter;
 document.addEventListener("DOMContentLoaded", () => {
+    let style = window.getComputedStyle(document.body);
+    let termCol = style.getPropertyValue("--clr-surface-a10");
     electron.loadTerm("");
     
     term = new Terminal({
@@ -8,14 +11,25 @@ document.addEventListener("DOMContentLoaded", () => {
         fontSize: 14, 
         lineHeight: 1,
     });
+    term.setOption("theme", {
+        foreground: "#eeeeee",
+        background: termCol
+    })
     term.open(getElement("terminal-content"));
     setTermWidth();
 
     electron.onTermIncoming((data) => {
         term.write(data);
+        if(isenter){
+            setTimeout(reloadRoot, 500, false);
+            isenter = false;
+        }
     })
 
     term.onData(e => {
+        if(e === "\r"){
+            isenter = true;
+        }
         electron.sendTermKeystroke(e);
     })
 })

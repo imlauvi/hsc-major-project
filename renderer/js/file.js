@@ -183,6 +183,11 @@ function deletePath(trigger){
         currOpen.removeAttribute("opened");
     }
     let pathContainer = trigger.closest(".path-container");
+    let path = pathContainer.getAttribute("path");
+    let tabOpen = document.querySelector(`.tab[tabpath="${escapePath(path)}"]`);
+    if(tabOpen){
+        closeTab(tabOpen.querySelector(".close-tab"));
+    }
 
     electron.deletePath(pathContainer.getAttribute("path"));
     pathContainer.remove();
@@ -269,26 +274,16 @@ function createNew(trigger, type){
     dirFrom.setAttribute("opened", null);
     let padding = dirFrom.querySelector(".path-info").style.paddingLeft;
     let htmlString;
-    if(type == "dir"){
-        htmlString = `
-            <span class="create-new" style="padding-left:calc(${padding} + 10px)" iserror>
-                <input type="text" createType="dir" class="create-new-input" style="width:calc(var(--sidetab-width) - ${padding} - 16px)" onkeyup="checkNewPath(event, this)" onfocusout="createNewPath(this, 'dir', ${parseInt(padding) + 10})">
-                <div class="create-new-warning" style="width:calc(var(--sidetab-width) - ${padding} - 12px)">
-                    New file/folder name must not be empty
-                </div>
+    htmlString = `
+        <span class="create-new" style="padding-left:calc(${padding} + 10px)" iserror>
+            <span class="create-new-input-wrapper">
+                <input type="text" createType="${type}" class="create-new-input" style="width:calc(var(--sidetab-width) - ${padding} - 21px)" onkeyup="checkNewPath(event, this)" onfocusout="createNewPath(this, '${type}', ${parseInt(padding) + 10})">
             </span>
-        `
-    }
-    else{
-        htmlString = `
-            <span class="create-new" style="padding-left:calc(${padding} + 10px)" iserror>
-                <input type="text" createType="file" class="create-new-input" style="width:calc(var(--sidetab-width) - ${padding} - 16px)" onkeyup="checkNewPath(event, this)" onfocusout="createNewPath(this, 'file', ${parseInt(padding) + 10})">
-                <div class="create-new-warning" style="width:calc(var(--sidetab-width) - ${padding} - 12px)">
-                    New file/folder name must not be empty
-                </div>
-            </span>
-        `
-    }
+            <div class="create-new-warning" style="width:calc(var(--sidetab-width) - ${padding} - 17px)">
+                New file/folder name must not be empty
+            </div>
+        </span>
+    `
     let createdForm = createElementFromHTML(htmlString);
     dirFrom.querySelector(".directory-content").prepend(createdForm);
     createdForm.querySelector(".create-new-input").focus();

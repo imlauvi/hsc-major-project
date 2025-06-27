@@ -203,6 +203,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     addEventListener("resize", function(){
         adjustCodeareaResize();
+        setTermWidth();
     })
 })
 
