@@ -122,6 +122,7 @@ function terminalResize(){ //maybe add mobile support
             }
         }
         document.documentElement.style.setProperty("--terminal-height", `${sizeClamp}px`);
+        adjustCodeareaResize();
     }
 
     function endResize(){
@@ -190,7 +191,6 @@ function codeAreaResize(){ //maybe add mobile support
 }
 
 function adjustCodeareaResize(){
-    let style = window.getComputedStyle(document.body);
     getElement("codearea-left-resize").style.setProperty("margin-left", `${getElement("codearea-left").clientWidth - 2}px`);
     refreshScrollCM();
 }
@@ -202,6 +202,10 @@ document.addEventListener('DOMContentLoaded', function(){
     adjustCodeareaResize();
 
     addEventListener("resize", function(){
+        let style = window.getComputedStyle(document.body);
+        document.documentElement.style.setProperty("--sidetab-width-max", `${getElement("content").clientWidth - getElement("sidenav").clientWidth - 100}px`);
+        let sizeClamp = Math.min(parseInt(style.getPropertyValue("--sidetab-width")), parseInt(style.getPropertyValue("--sidetab-width-max")));
+        document.documentElement.style.setProperty("--sidetab-width", `${sizeClamp}px`);
         adjustCodeareaResize();
         setTermWidth();
     })

@@ -8,6 +8,7 @@
     <link href="css/folderdisplay.css" rel="stylesheet">
     <link href="css/themes.css" rel="stylesheet">
     <link href="css/code.css" rel="stylesheet">
+    <link href="css/tasks.css" rel="stylesheet">
     <script src="js/resize.js"></script>
     <script src="js/tabs.js"></script>
     <script src="js/main.js"></script>
@@ -15,6 +16,7 @@
     <script src="js/utils.js"></script>
     <script src="js/file.js"></script>
     <script src="js/terminal.js"></script>
+    <script src="js/tasks.js"></script>
 
     <script src="../node_modules/codemirror/lib/codemirror.js"></script>
     <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
@@ -66,13 +68,13 @@
         </div>
         <div class="sidenav side" id="sidenav">
             <div class="sidenav-content" id="sidenav-content">
-                <div class='side-icon' focused>
+                <div class='side-icon' to="folder-tab" onclick="openSideTab(this)" focused>
                     <i class='bx bx-file-blank'></i>
                     <span class="tooltip tooltip-left">
                         Explorer
                     </span>
                 </div>
-                <div class='side-icon'>
+                <div class='side-icon' to="tasks-tab" onclick="openSideTab(this)">
                     <i class='bx bx-calendar'></i>
                     <span class="tooltip tooltip-left">
                         Project schedule
@@ -84,8 +86,119 @@
     <div class="content" id="content">
         <div class="sidetab side" id="sidetab">
             <div class="sidetab-content" id="sidetab-content">
-                <div class="sidetab-tab" id="folder-tab">
+                <div class="sidetab-tab" id="folder-tab" isopen="null">
 
+                </div>
+                <div class="sidetab-tab" id="tasks-tab">
+                    <div class="tasks" id="tasks">
+                        <span class="tasks-header">
+                            <span class="tasks-title">Tasks</span>
+                            <span class="task-options">
+                                <i class="bx bx-menu task-button" id="toggle-task-breakdown" onmouseenter="openHoverMsg(event, this)" onmouseleave="closeHoverMsg(this)" onclick="toggleTaskBreakdown()" isopen>
+                                    <span class="hover-msg">
+                                        Task breakdown
+                                    </span>
+                                </i>
+                            </span>
+                        </span>
+                        <span class="task-creation">
+                            <span class="task-input" id="task-name-input">
+                                Task name: 
+                                <input type="text" id="name-text-input">
+                            </span>
+                            <span class="task-input" id="task-priority-input">
+                                Priority: 
+                                <select class="select-input" id="priority-select-input">
+                                    <option value="high">High</option>
+                                    <option value="mid">Medium</option>
+                                    <option value="low">Low</option>
+                                </select>
+                            </span>
+                            <span class="task-input" id="task-type-input">
+                                Type: 
+                                <select class="select-input" id="type-select-input">
+                                    <option value="planning">Planning</option>
+                                    <option value="design">Design</option>
+                                    <option value="development">Development</option>
+                                    <option value="debugging">Debugging</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </span>
+                            <span class="task-input" id="due-date-input">
+                                <input class="datetime-input" type="datetime-local" id="date-input">
+                            </span>
+                            <span class="task-input" id="create-task">
+                                <input type="submit" id="create-task-btn" value="Create task">
+                            </span>
+                        </span>
+                        <div class="tasks-wrapper">
+                            <div class="task-group" id="overdue">
+                                <span class="task-group-header">Overdue</span>
+                                <div class="task-group-content">
+                                    <span class="task">
+                                        <span class="task-name">
+                                            Test
+                                        </span>
+                                        <i class="priority-level priority-high" onmouseenter="openHoverMsg(event, this)" onmouseleave="closeHoverMsg(this)">
+                                            <span class="hover-msg">
+                                                Priority: High
+                                            </span>
+                                        </i>
+                                        <span class="task-type" onmouseenter="openHoverMsg(event, this)" onmouseleave="closeHoverMsg(this)">
+                                            Other
+                                            <span class="hover-msg">
+                                                Task type
+                                            </span>
+                                        </span>
+                                        <span class="task-date" onmouseenter="openHoverMsg(event, this)" onmouseleave="closeHoverMsg(this)">
+                                            XX/XX/XXXX
+                                            <span class="hover-msg">
+                                                Due in X time
+                                            </span>
+                                        </span>
+                                        <i class="bx bx-trash task-button delete-task" onmouseenter="openHoverMsg(event, this)" onmouseleave="closeHoverMsg(this)">
+                                            <span class="hover-msg">
+                                                Delete task
+                                            </span>
+                                        </i>
+                                        <div class="complete-wrapper" onmouseenter="openHoverMsg(event, this)" onmouseleave="closeHoverMsg(this)"> 
+                                            <input type="checkbox">
+                                            <span class="hover-msg">
+                                                Mark as complete
+                                            </span>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="task-group" id="due-today">
+                                <span class="task-group-header">Due today</span>
+                                <div class="task-group-content">
+
+                                </div>
+                            </div>
+                            <div class="task-group" id="due-this-week">
+                                <span class="task-group-header">Due this week</span>
+                                <div class="task-group-content">
+
+                                </div>
+                            </div>
+                            <div class="task-group" id="due-later">
+                                <span class="task-group-header">Due later</span>
+                                <div class="task-group-content">
+
+                                </div>
+                            </div>
+                            <div class="task-group" id="complete">
+                                <span class="task-group-header">Complete</span>
+                                <div class="task-group-content">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-breakdown" id="task-breakdown">
+                        test
+                    </div>
                 </div>
             </div>
             <div class="sidetab-resize" id="sidetab-resize"></div>
