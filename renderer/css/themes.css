@@ -1,4 +1,11 @@
 :root{
+    /* other colours */
+    --clr-other-error-red-light: #b32424;
+    --clr-other-error-red-dark: #6a2424;
+    --clr-other-tab-edit: #edca83;
+}
+
+:root{
     /** Base colors */
     --clr-dark-a0: #000000;
     --clr-light-a0: #ffffff;
@@ -26,9 +33,4 @@
     --clr-surface-tonal-a30: #56585c;
     --clr-surface-tonal-a40: #707275;
     --clr-surface-tonal-a50: #8b8c8f;
-
-    /* other colours */
-    --clr-other-error-red-light: #b32424;
-    --clr-other-error-red-dark: #6a2424;
-    --clr-other-tab-edit: #edca83;
 }

@@ -1,6 +1,11 @@
 const exttolang = {
     ".py": "python",
     ".js": "javascript",
+    ".cpp": "clike",
+    ".c": "clike",
+    ".cs": "clike",
+    ".css": "css",
+    ".html": "htmlmixed",
 }
 
 async function openFolder(){
@@ -23,18 +28,15 @@ async function openFolder(){
                         }
                     }
                 }
-                electron.loadPath(rootDir)
+                electron.loadPath(rootDir, true)
                     .then(async (pathloaded) => {
-                        electron.loadTerm(pathloaded.path);
+                        await electron.loadTerm(pathloaded.path);
                         getElement("folder-tab").innerHTML = constructDir(pathloaded, 0, true, []);
+                        tasks = await electron.loadTasks(rootDir);
+                        loadTasks();
                     })
             }
         });
-}
-
-async function loadPath(dirName){
-    let res = await electron.loadPath(dirName)
-    return res;
 }
 
 function constructDir(dir, padding, root, openedFolders){
@@ -173,7 +175,7 @@ function constructTab(trigger){
     `
     tabGroup.insertAdjacentHTML("beforeend", newTab);
     tabcontent.insertAdjacentHTML("beforeend", newTabContent);
-    electron.loadPath(path)
+    electron.loadPath(path, false)
         .then((res) => {
             let view = CodeMirror.fromTextArea(
                 document.querySelector(`.window[tabpath="${escapePath(path)}"] .code-editor`), 
@@ -192,23 +194,30 @@ function constructTab(trigger){
             view.setOption("styleActiveLine", true);
             view.setOption("autoCloseBrackets", true);
             view.setOption("matchBrackets", true);
-            view.setOption("theme", "monokai");
+            view.setOption("theme", settings.editorTheme);
             if(ext in exttolang){
                 view.setOption("mode", exttolang[ext]);
             }
+            view.getWrapperElement().style.fontSize = `${settings.fontSize}px`;
+            view.refresh();
             openTab(document.querySelector(`.tab[tabpath="${escapePath(path)}"]`));
         })
 }
 
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", async function(){
     closeAllTabs();
     getElement("folder-tab").innerHTML = "";
     rootDir = "C:\\Users\\leviz\\OneDrive\\Desktop\\hsc-major-project-testing";
     reloadRoot(true);
+    tasks = await electron.loadTasks(rootDir);
+    for(let i = 0; i < tasks.length; i++){
+        tasks[i].date = new Date(tasks[i].date);
+    }
+    loadTasks();
 })
 
 function reloadRoot(reload){
-    electron.loadPath(rootDir)
+    electron.loadPath(rootDir, true)
         .then(async (pathloaded) => {
             if(reload){
                 electron.loadTerm(pathloaded.path);
@@ -233,18 +242,37 @@ function editCode(event){
     let path = editFile.getAttribute("tabpath");
     let corrTab = document.querySelector(`.tab[tabpath="${escapePath(path)}"]`)
     if(event.ctrlKey && event.key == "s"){
-        if(editFile.hasAttribute("edited")){
-            editFile.removeAttribute("edited");
-        }
-        if(corrTab.hasAttribute("edited")){
-            corrTab.removeAttribute("edited");
-        }
-        let cm = editFile.querySelector(".CodeMirror").CodeMirror;
-        let content = cm.getValue();
-        electron.writeFile(path, content);
+        save(editFile);
     }
-    else if(/^.$/u.test(event.key)){
+    else if(/^.$/u.test(event.key) || event.key === "Backspace" || event.key === "Delete" || event.key === "Enter"){
         editFile.setAttribute("edited", null);
         corrTab.setAttribute("edited", null);
     }
+}
+
+function saveAll(){
+    for(let window of document.querySelectorAll(".window")){
+        save(window);
+    }
+}
+
+function saveActive(){
+    let mainWindow = document.querySelector(".codearea-group[main] .window[active]");
+    if(mainWindow){
+        save(mainWindow);
+    }
+}
+
+function save(saveWindow){
+    let path = saveWindow.getAttribute("tabpath");
+    let corrTab = document.querySelector(`.tab[tabpath="${escapePath(path)}"]`)
+    if(saveWindow.hasAttribute("edited")){
+        saveWindow.removeAttribute("edited");
+    }
+    if(corrTab.hasAttribute("edited")){
+        corrTab.removeAttribute("edited");
+    }
+    let cm = saveWindow.querySelector(".CodeMirror").CodeMirror;
+    let content = cm.getValue();
+    electron.writeFile(path, content);
 }

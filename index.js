@@ -5,12 +5,12 @@ const path = require('path')
 const fs = require("fs-extra")
 const pty = require("node-pty");
 const os = require("os");
-
+const { defaults, set, get, hasSync } = require('electron-settings');
 
 let win;
+let settingsPages = new Map();
 let ptyProcess;
 let shell = os.platform() === "win32" ? "powershell.exe" : "bash"
-
 
 function createWindow () {
     // Create the browser window.
@@ -48,6 +48,41 @@ function createWindow () {
     })
 }
 
+function createSettings(){
+    let child = new BrowserWindow({
+        parent: win,
+        frame: false,
+        titleBarStyle: 'hidden',
+        ...(process.platform !== 'darwin' ? { 
+            titleBarOverlay: {
+                color: '#1e1e1e',
+                symbolColor: '#ffffff',
+                height: 30,
+            } 
+        } : {}),
+        width: 400,
+        height: 300,
+        icon: path.join(__dirname, 'renderer/icons/icon.png'),
+        webPreferences: {
+            contextIsolation: true,
+            devTools: true,
+            preload: path.join(__dirname, "preload.js")
+        },
+        acceptFirstMouse: true,
+    });
+
+    child.loadFile(path.join(__dirname, './renderer/settings.html'));
+    let id = 0;
+    while(settingsPages.has(id)){
+        id++;
+    }
+    settingsPages.set(id, child);
+    child.on('closed', () => {
+        settingsPages.delete(id);
+    })
+
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -75,9 +110,33 @@ app.whenReady().then(() => {
         return dialog[method](params);
     });
 
-    ipcMain.handle('loadPath', async (event, pathstr) => {       
+    ipcMain.handle('loadPath', async (event, pathstr, root) => {       
         if(!fs.existsSync(pathstr)){
             throw Error("Path not found")
+        }
+
+        if(root){
+            if(fs.existsSync(pathstr + "\\.bscode")){
+                if(fs.statSync(pathstr + "\\.bscode").isFile()){
+                    fs.unlinkSync(pathstr + "\\.bscode");
+                    fs.mkdir(pathstr + "\\.bscode");
+                }
+            }
+            else{
+                fs.mkdir(pathstr + "\\.bscode");
+            }
+
+            if(fs.existsSync(pathstr + "\\.bscode\\tasks.json")){
+                if(fs.statSync(pathstr + "\\.bscode\\tasks.json").isDirectory()){
+                    fs.rmSync(pathstr + "\\.bscode\\tasks.json", {recursive: true, force: true});
+                    await fs.writeFile(pathstr + "\\.bscode\\tasks.json", "", "utf8");
+                    fs.writeFileSync(pathstr + "\\.bscode\\tasks.json", "[]", "utf8");
+                }
+            }
+            else{
+                await fs.writeFile(pathstr + "\\.bscode\\tasks.json", "", "utf8");
+                fs.writeFileSync(pathstr + "\\.bscode\\tasks.json", "[]", "utf8");
+            }
         }
 
         if(fs.statSync(pathstr).isDirectory()){
@@ -145,6 +204,40 @@ app.whenReady().then(() => {
         }
     })
 
+    ipcMain.handle('loadTasks', (event, pathstr) => {
+        try{
+            return JSON.parse(fs.readFileSync(pathstr + "\\.bscode\\tasks.json", "utf8"));
+        }
+        catch{
+            return []
+        }
+    })
+
+    ipcMain.handle('editTasks', (event, pathstr, contents) => {
+        fs.writeFileSync(pathstr + "\\.bscode\\tasks.json", JSON.stringify(contents), "utf8");
+    })
+
+    ipcMain.handle('openSettings', (event) => {
+        createSettings();
+    })
+
+    ipcMain.handle('updateSettings', async (event, settings) => {
+        for(let [key, value] of Object.entries(settings)){
+            await set(key, value);
+        }
+        win.webContents.send("settingsChange", await getSettings());
+        settingsPages.forEach(async (child, key) => {
+            child.webContents.send("settingsChange", await getSettings());
+        })
+    })
+
+    ipcMain.handle('fetchSettings', async (event) => {
+        win.webContents.send("settingsChange", await getSettings());
+        settingsPages.forEach(async (child, key) => {
+            child.webContents.send("settingsChange", await getSettings());
+        })
+    })
+
     ptyProcess = pty.spawn(shell, [], {
         cwd: process.env.HOME,
         env: process.env
@@ -175,6 +268,9 @@ async function loadDir(pathstr){
     let dir = await fs.promises.readdir(pathstr);
     let dircontents = [];
     for(let contentpath of dir){
+        if(contentpath == ".bscode"){
+            continue;
+        }
         fullpath = path.join(pathstr, contentpath);
         if(fs.lstatSync(fullpath).isFile()){
             dircontents.push(
@@ -197,4 +293,12 @@ async function loadDir(pathstr){
         }
     }
     return dircontents;
+}
+
+async function getSettings(){
+    return {
+        editorFont: await get("editorFont") ?? "monospace",
+        fontSize: await get("fontSize") ?? 14,
+        editorTheme: await get("editorTheme") ?? "monokai"
+    }
 }

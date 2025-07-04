@@ -14,3 +14,7 @@
 .CodeMirror-gutters{
     background-color: var(--clr-surface-a20) !important;
 }
+
+.CodeMirror * {
+    font-family: var(--editor-font);
+}

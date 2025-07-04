@@ -170,7 +170,7 @@ body[dragfile] .path-info{
 }
 
 .file > .path-info > .info-wrapper > .info-name{
-    width: 100% !important;
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -180,4 +180,11 @@ body[dragfile] .path-info{
     padding-left: 5px;
     display: flex;
     border-left: 1px solid var(--clr-surface-a30);
+}
+
+.directory:not(.root-directory) > .path-info .info-wrapper .info-name{
+    width: calc(100% - 14px) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

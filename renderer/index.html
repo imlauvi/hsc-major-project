@@ -17,14 +17,22 @@
     <script src="js/file.js"></script>
     <script src="js/terminal.js"></script>
     <script src="js/tasks.js"></script>
+    <script src="js/settings.js"></script>
 
     <script src="../node_modules/codemirror/lib/codemirror.js"></script>
     <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
     <link rel="stylesheet" href="../node_modules/codemirror/theme/monokai.css">
+    <link rel="stylesheet" href="../node_modules/codemirror/theme/midnight.css">
+    <link rel="stylesheet" href="../node_modules/codemirror/theme/ayu-dark.css">
     <script src="../node_modules/codemirror/mode/python/python.js"></script>
     <script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
+    <script src="../node_modules/codemirror/mode/clike/clike.js"></script>
+    <script src="../node_modules/codemirror/mode/css/css.js"></script>
+    <script src="../node_modules/codemirror/mode/xml/xml.js"></script>
+    <script src="../node_modules/codemirror/mode/htmlmixed/htmlmixed.js"></script>
     <script src="../node_modules/codemirror/addon/edit/closebrackets.js"></script>
     <script src="../node_modules/codemirror/addon/edit/matchbrackets.js"></script>
+    <script src="../node_modules/codemirror/addon/selection/active-line.js"></script>
     <script src="../node_modules/codemirror/addon/selection/active-line.js"></script>
 
     <script src="../node_modules/@xterm/xterm/lib/xterm.js"></script>
@@ -46,23 +54,12 @@
                         <li>
                             <hr class="menu-separator">
                         </li>
-                        <li class="dropdown-item" onclick="">Save</li>
-                        <li class="dropdown-item" onclick="">Save all</li>
+                        <li class="dropdown-item" onclick="saveActive()">Save</li>
+                        <li class="dropdown-item" onclick="saveAll()">Save all</li>
                     </ul>
                 </btn>
-                <btn class="top-btn dropdown-trigger" id="settings-btn">
+                <btn class="top-btn" id="settings-btn" onclick="openSettings()">
                     Settings
-
-                    <ul class="dropdown">
-                        <li class="dropdown-item">test</li>
-                    </ul>
-                </btn>
-                <btn class="top-btn dropdown-trigger" id="help-btn">
-                    Help
-
-                    <ul class="dropdown">
-                        <li class="dropdown-item">test</li>
-                    </ul>
                 </btn>
             </div>
         </div>
@@ -71,13 +68,13 @@
                 <div class='side-icon' to="folder-tab" onclick="openSideTab(this)" focused>
                     <i class='bx bx-file-blank'></i>
                     <span class="tooltip tooltip-left">
-                        Explorer
+                        Files
                     </span>
                 </div>
                 <div class='side-icon' to="tasks-tab" onclick="openSideTab(this)">
                     <i class='bx bx-calendar'></i>
                     <span class="tooltip tooltip-left">
-                        Project schedule
+                        Tasks
                     </span>
                 </div>
             </div>
@@ -101,14 +98,15 @@
                                 </i>
                             </span>
                         </span>
-                        <span class="task-creation">
+                        <form class="task-creation" onsubmit="createTask(event, this)">
                             <span class="task-input" id="task-name-input">
                                 Task name: 
-                                <input type="text" id="name-text-input">
+                                <input type="text" name="task-name" id="name-text-input">
+                                <span class="task-warning"></span>
                             </span>
                             <span class="task-input" id="task-priority-input">
                                 Priority: 
-                                <select class="select-input" id="priority-select-input">
+                                <select class="select-input" name="task-priority" id="priority-select-input">
                                     <option value="high">High</option>
                                     <option value="mid">Medium</option>
                                     <option value="low">Low</option>
@@ -116,7 +114,7 @@
                             </span>
                             <span class="task-input" id="task-type-input">
                                 Type: 
-                                <select class="select-input" id="type-select-input">
+                                <select class="select-input" name="task-type" id="type-select-input">
                                     <option value="planning">Planning</option>
                                     <option value="design">Design</option>
                                     <option value="development">Development</option>
@@ -125,134 +123,118 @@
                                 </select>
                             </span>
                             <span class="task-input" id="due-date-input">
-                                <input class="datetime-input" type="datetime-local" id="date-input">
+                                <input class="datetime-input" type="datetime-local" name="task-due" id="date-input" onchange="removeWarning(this.parentElement)">
+                                <span class="task-warning"></span>
                             </span>
                             <span class="task-input" id="create-task">
-                                <input type="submit" id="create-task-btn" value="Create task">
+                                <input type="submit" id="create-task-btn" name="task-create" value="Create task">
                             </span>
+                        </form>
+                        <span class="sort-by">
+                            Sort by: 
+                            <select class="select-input" id="select-sort-by" onchange="loadTasks()">
+                                <option value="name">Name</option>
+                                <option value="priority">Priority</option>
+                                <option value="due">Due date</option>
+                                <option value="type">Task type</option>
+                            </select>
                         </span>
-                        <div class="tasks-wrapper">
-                            <div class="task-group" id="overdue">
-                                <span class="task-group-header">Overdue</span>
-                                <div class="task-group-content">
-                                    <span class="task">
-                                        <span class="task-name">
-                                            Test
-                                        </span>
-                                        <i class="priority-level priority-high" onmouseenter="openHoverMsg(event, this)" onmouseleave="closeHoverMsg(this)">
-                                            <span class="hover-msg">
-                                                Priority: High
-                                            </span>
-                                        </i>
-                                        <span class="task-type" onmouseenter="openHoverMsg(event, this)" onmouseleave="closeHoverMsg(this)">
-                                            Other
-                                            <span class="hover-msg">
-                                                Task type
-                                            </span>
-                                        </span>
-                                        <span class="task-date" onmouseenter="openHoverMsg(event, this)" onmouseleave="closeHoverMsg(this)">
-                                            XX/XX/XXXX
-                                            <span class="hover-msg">
-                                                Due in X time
-                                            </span>
-                                        </span>
-                                        <i class="bx bx-trash task-button delete-task" onmouseenter="openHoverMsg(event, this)" onmouseleave="closeHoverMsg(this)">
-                                            <span class="hover-msg">
-                                                Delete task
-                                            </span>
-                                        </i>
-                                        <div class="complete-wrapper" onmouseenter="openHoverMsg(event, this)" onmouseleave="closeHoverMsg(this)"> 
-                                            <input type="checkbox">
-                                            <span class="hover-msg">
-                                                Mark as complete
-                                            </span>
-                                        </div>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="task-group" id="due-today">
-                                <span class="task-group-header">Due today</span>
-                                <div class="task-group-content">
-
-                                </div>
-                            </div>
-                            <div class="task-group" id="due-this-week">
-                                <span class="task-group-header">Due this week</span>
-                                <div class="task-group-content">
-
-                                </div>
-                            </div>
-                            <div class="task-group" id="due-later">
-                                <span class="task-group-header">Due later</span>
-                                <div class="task-group-content">
-
-                                </div>
-                            </div>
-                            <div class="task-group" id="complete">
-                                <span class="task-group-header">Complete</span>
-                                <div class="task-group-content">
-
-                                </div>
-                            </div>
-                        </div>
+                        <div class="tasks-wrapper" id="tasks-wrapper"></div>
                     </div>
                     <div class="task-breakdown" id="task-breakdown">
-                        test
+                        <span class="tasks-header">
+                            Task breakdown
+                        </span>
+                        <div class="breakdown" id="breakdown-overall">
+                            <span class="breakdown-info">
+                                <span class="breakdown-category">
+                                    Overall
+                                </span>
+                                <span class="breakdown-completion">
+                                    X/X
+                                </span>
+                            </span>
+                            <div class="breakdown-bar task-type-other-light">
+                                <div class="breakdown-bar-fill task-type-other"></div>
+                            </div>
+                        </div>
+                        <div class="breakdown" id="breakdown-planning">
+                            <span class="breakdown-info">
+                                <span class="breakdown-category">
+                                    Planning
+                                </span>
+                                <span class="breakdown-completion">
+                                    X/X
+                                </span>
+                            </span>
+                            <div class="breakdown-bar task-type-planning-light">
+                                <div class="breakdown-bar-fill task-type-planning"></div>
+                            </div>
+                        </div>
+                        <div class="breakdown" id="breakdown-design">
+                            <span class="breakdown-info">
+                                <span class="breakdown-category">
+                                    Design
+                                </span>
+                                <span class="breakdown-completion">
+                                    X/X
+                                </span>
+                            </span>
+                            <div class="breakdown-bar task-type-design-light">
+                                <div class="breakdown-bar-fill task-type-design"></div>
+                            </div>
+                        </div>
+                        <div class="breakdown" id="breakdown-development">
+                            <span class="breakdown-info">
+                                <span class="breakdown-category">
+                                    Development
+                                </span>
+                                <span class="breakdown-completion">
+                                    X/X
+                                </span>
+                            </span>
+                            <div class="breakdown-bar task-type-development-light">
+                                <div class="breakdown-bar-fill task-type-development"></div>
+                            </div>
+                        </div>
+                        <div class="breakdown" id="breakdown-debugging">
+                            <span class="breakdown-info">
+                                <span class="breakdown-category">
+                                    Debugging
+                                </span>
+                                <span class="breakdown-completion">
+                                    X/X
+                                </span>
+                            </span>
+                            <div class="breakdown-bar task-type-debugging-light">
+                                <div class="breakdown-bar-fill task-type-debugging"></div>
+                            </div>
+                        </div>
+                        <div class="breakdown" id="breakdown-other">
+                            <span class="breakdown-info">
+                                <span class="breakdown-category">
+                                    Other
+                                </span>
+                                <span class="breakdown-completion">
+                                    X/X
+                                </span>
+                            </span>
+                            <div class="breakdown-bar task-type-other-light">
+                                <div class="breakdown-bar-fill task-type-other"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="sidetab-resize" id="sidetab-resize"></div>
         </div>
         <div class="main" id="main">
-            <div class="codearea" id="codearea" opened="10">
-                <div class="codearea-left codearea-group" id="codearea-left" onmousedown="setMain(this)" main="null" opened="null">
+            <div class="codearea" id="codearea" opened="00">
+                <div class="codearea-left codearea-group" id="codearea-left" onmousedown="setMain(this)" main="null">
                     <div class="tabs" id="tabs-left">
-                        <div class="tab" tabpath="example" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true" selected>
-                            <div class="tab-name">
-                                example
-                            </div>
-                            <div class="close-tab" onclick="closeTab(this)">
-                                &#10005;
-                            </div>
-                        </div>
-                        <div class="tab" tabpath="example2" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true">
-                            <div class="tab-name">
-                                example2
-                            </div>
-                            <div class="close-tab" onclick="closeTab(this)">
-                                &#10005;
-                            </div>
-                        </div>
-                        <div class="tab" tabpath="example3" ondragstart="beginDrag(event)" ondragend="endDrag()" onmousedown="openTab(this)" draggable="true">
-                            <div class="tab-name">
-                                example3
-                            </div>
-                            <div class="close-tab" onclick="closeTab(this)">
-                                &#10005;
-                            </div>
-                        </div>
                         <div class="tab-drop-indicator" id="tab-drop-indicator-left" ishidden="null"></div>
                     </div>
-                    <div class="tab-content" id="tab-content-left">
-                        <div class="window" tabpath="example" active="null">
-                            <div class="window-info">
-
-                            </div>
-                            test1
-                        </div>
-                        <div class="window" tabpath="example2">
-                            <div class="window-info">
-
-                            </div>
-                            test2
-                        </div>
-                        <div class="window" tabpath="example3">
-                            <div class="window-info">
-
-                            </div>
-                            test3
-                        </div>
-                    </div>
+                    <div class="tab-content" id="tab-content-left"></div>
                 </div>
                 <div class="codearea-left-resize" id="codearea-left-resize"></div>
                 <div class="codearea-right codearea-group" id="codearea-right" onmousedown="setMain(this)">
@@ -269,8 +251,6 @@
             </div>
         </div>
     </div>
-    <div class="bottomnav" id="bottomnav">
-        test
-    </div>
+    <div class="bottomnav" id="bottomnav"></div>
 </body>
 </html>
