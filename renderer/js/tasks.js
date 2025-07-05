@@ -136,8 +136,8 @@ function checkTaskExists(taskname){
 
 function genTask(task){
     taskhtml = `
-        <span class="task" taskname="${task.name}">
-            <span class="task-component-wrapper">
+        <span class="task" taskname="${task.name}" due="${timeUntil(task)[1]}">
+            <span class="task-component-wrapper task-name-wrapper">
                 <span class="task-name">
                     ${task.name}
                 </span>

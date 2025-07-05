@@ -11,3 +11,7 @@ function createElementFromHTML(htmlString) {
     div.innerHTML = htmlString.trim();
     return div.firstChild;
 }
+
+function example(){
+    return 175
+}

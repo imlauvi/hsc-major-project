@@ -99,6 +99,12 @@
     flex-basis: 0;
 }
 
+.task-name-wrapper{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow-x: hidden;
+}
+
 .task + .task{
     margin-top: 4px;
 }
@@ -172,6 +178,14 @@ input[type="submit"]{
 
 .task-name{
     font-weight: 500;
+}
+
+.task[due="overdue"] .task-name-wrapper{
+    color: var(--clr-task-overdue);
+}
+
+.task[due="complete"] .task-name-wrapper{
+    color: var(--clr-task-complete);
 }
 
 .task-overdue{

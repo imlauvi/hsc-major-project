@@ -1,11 +1,9 @@
-//use npm drag-tabs?
-
 const { ipcMain, dialog, app, BrowserWindow } = require('electron')
 const path = require('path')
 const fs = require("fs-extra")
 const pty = require("node-pty");
 const os = require("os");
-const { defaults, set, get, hasSync } = require('electron-settings');
+const { set, get } = require('electron-settings');
 
 let win;
 let settingsPages = new Map();
@@ -116,26 +114,26 @@ app.whenReady().then(() => {
         }
 
         if(root){
-            if(fs.existsSync(pathstr + "\\.bscode")){
-                if(fs.statSync(pathstr + "\\.bscode").isFile()){
-                    fs.unlinkSync(pathstr + "\\.bscode");
-                    fs.mkdir(pathstr + "\\.bscode");
+            if(fs.existsSync(pathstr + "\\.bitcode")){
+                if(fs.statSync(pathstr + "\\.bitcode").isFile()){
+                    fs.unlinkSync(pathstr + "\\.bitcode");
+                    fs.mkdir(pathstr + "\\.bitcode");
                 }
             }
             else{
-                fs.mkdir(pathstr + "\\.bscode");
+                fs.mkdir(pathstr + "\\.bitcode");
             }
 
-            if(fs.existsSync(pathstr + "\\.bscode\\tasks.json")){
-                if(fs.statSync(pathstr + "\\.bscode\\tasks.json").isDirectory()){
-                    fs.rmSync(pathstr + "\\.bscode\\tasks.json", {recursive: true, force: true});
-                    await fs.writeFile(pathstr + "\\.bscode\\tasks.json", "", "utf8");
-                    fs.writeFileSync(pathstr + "\\.bscode\\tasks.json", "[]", "utf8");
+            if(fs.existsSync(pathstr + "\\.bitcode\\tasks.json")){
+                if(fs.statSync(pathstr + "\\.bitcode\\tasks.json").isDirectory()){
+                    fs.rmSync(pathstr + "\\.bitcode\\tasks.json", {recursive: true, force: true});
+                    await fs.writeFile(pathstr + "\\.bitcode\\tasks.json", "", "utf8");
+                    fs.writeFileSync(pathstr + "\\.bitcode\\tasks.json", "[]", "utf8");
                 }
             }
             else{
-                await fs.writeFile(pathstr + "\\.bscode\\tasks.json", "", "utf8");
-                fs.writeFileSync(pathstr + "\\.bscode\\tasks.json", "[]", "utf8");
+                await fs.writeFile(pathstr + "\\.bitcode\\tasks.json", "", "utf8");
+                fs.writeFileSync(pathstr + "\\.bitcode\\tasks.json", "[]", "utf8");
             }
         }
 
@@ -206,7 +204,7 @@ app.whenReady().then(() => {
 
     ipcMain.handle('loadTasks', (event, pathstr) => {
         try{
-            return JSON.parse(fs.readFileSync(pathstr + "\\.bscode\\tasks.json", "utf8"));
+            return JSON.parse(fs.readFileSync(pathstr + "\\.bitcode\\tasks.json", "utf8"));
         }
         catch{
             return []
@@ -214,7 +212,7 @@ app.whenReady().then(() => {
     })
 
     ipcMain.handle('editTasks', (event, pathstr, contents) => {
-        fs.writeFileSync(pathstr + "\\.bscode\\tasks.json", JSON.stringify(contents), "utf8");
+        fs.writeFileSync(pathstr + "\\.bitcode\\tasks.json", JSON.stringify(contents), "utf8");
     })
 
     ipcMain.handle('openSettings', (event) => {
@@ -268,7 +266,7 @@ async function loadDir(pathstr){
     let dir = await fs.promises.readdir(pathstr);
     let dircontents = [];
     for(let contentpath of dir){
-        if(contentpath == ".bscode"){
+        if(contentpath == ".bitcode"){
             continue;
         }
         fullpath = path.join(pathstr, contentpath);

@@ -54,13 +54,16 @@ span{
     display: inline;
     padding: 0px 5px;
     padding-bottom: 1px;
-    padding-left: 8px; 
     margin-left: 10px;
     background-color: var(--clr-surface-a10);
     border-radius: 4px;
     line-height: 0px;
     align-items: center;
     app-region: no-drag;
+}
+
+.top-btn+.top-btn{
+    padding-left: 8px; 
 }
 
 .top-btn:hover{
@@ -267,7 +270,6 @@ body[resizing] .sidetab-resize:hover{
     border-bottom: 1px solid var(--clr-surface-a30);
     background-color: var(--clr-surface-a10);
     overflow-x: auto;
-    overflow-y: hidden;
 }
 
 .tabs-content{
@@ -290,11 +292,18 @@ body[resizing] .sidetab-resize:hover{
 }
 
 .tab[selected]{
+    height: 100%;
     color: var(--clr-light-a0);
     background-color: var(--clr-surface-a20);
-    margin-top: 1px;
-    border-bottom: 1px solid var(--clr-surface-a20);
-    outline: none;
+}
+
+.codearea-group[main] .tab[selected]{
+    height: calc(100% - 2px);
+    border-top: 2px solid var(--clr-primary-a0);
+}
+
+.codearea-group[main] .tab[selected] *{
+    margin-top: -2px;
 }
 
 .tab:hover{
@@ -393,7 +402,7 @@ body[resizing] .sidetab-resize:hover{
     cursor: ew-resize;
     transition: opacity 0.2s;
     visibility: hidden;
-    height: calc(100% - var(--terminal-height) - var(--tabs-height) - var(--path-info-height) - 14px); /*this shouldnt work but it does i have no idea why*/
+    height: calc(100% - var(--terminal-height) - var(--tabs-height) - var(--path-info-height) + 15px); /*this shouldnt work but it does i have no idea why*/
 }
 
 .codearea[opened="11"] .codearea-left-resize{
@@ -444,7 +453,7 @@ body[resizing] .codearea-left-resize:hover{
 .drop-indicator{
     position: absolute;
     margin-top: calc(var(--tabs-height));
-    height: calc(100% - var(--tabs-height) - var(--terminal-height) - 55px);
+    height: calc(100% - var(--tabs-height) - var(--terminal-height) - 5px);
     width: 100%;
     margin-left: 0;
     background-color: #57575781;
@@ -463,6 +472,7 @@ body[resizing] .codearea-left-resize:hover{
     display: flex;
     height: var(--path-info-height);
     width: 100%;
+    padding-inline: 5px;
     border-bottom: 1px solid var(--clr-surface-a30);
     overflow: hidden;
 }
