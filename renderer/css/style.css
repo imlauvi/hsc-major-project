@@ -1,5 +1,7 @@
 @import url(themes.css);
 @import url('https://fonts.cdnfonts.com/css/consola-mono');
+@import url("https://fonts.googleapis.com/css?family=Roboto Mono");
+@import url("https://fonts.googleapis.com/css?family=Inconsolata");
 
 :root{
     --top-bar-height: 30px;

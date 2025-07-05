@@ -1,5 +1,5 @@
 {
-  "name": "bithub",
+  "name": "bitcode",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -28,7 +28,7 @@
     "xterm-addon-fit": "^0.8.0"
   },
   "devDependencies": {
-    "electron": "^34.3.0",
+    "electron": "^37.2.0",
     "electron-rebuild": "^3.2.9"
   }
 }
