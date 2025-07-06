@@ -205,7 +205,12 @@ app.whenReady().then(() => {
 
     ipcMain.handle('loadTasks', (event, pathstr) => {
         try{
-            return JSON.parse(fs.readFileSync(pathstr + "\\.bitcode\\tasks.json", "utf8"));
+            let tasks = JSON.parse(fs.readFileSync(pathstr + "\\.bitcode\\tasks.json", "utf8"));
+            for(let i = 0; i < tasks.length; i++){
+                let asDate = new Date(tasks[i].date);
+                tasks[i].date = asDate;
+            }
+            return tasks;
         }
         catch{
             return []
@@ -213,6 +218,9 @@ app.whenReady().then(() => {
     })
 
     ipcMain.handle('editTasks', (event, pathstr, contents) => {
+        for(let i = 0; i < contents.length; i++){
+            contents[i].date = contents[i].date.toString();
+        }
         fs.writeFileSync(pathstr + "\\.bitcode\\tasks.json", JSON.stringify(contents), "utf8");
     })
 
