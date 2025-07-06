@@ -206,7 +206,7 @@ function constructTab(trigger){
 
 document.addEventListener("DOMContentLoaded", async function(){
     closeAllTabs();
-    getElement("folder-tab").innerHTML = "";
+    getElement("folder-tab").innerHTML = "Open a folder to get started";
 })
 
 function reloadRoot(reload){
