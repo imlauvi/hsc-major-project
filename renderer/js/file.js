@@ -326,7 +326,7 @@ function createNewPath(trigger, type, padding){
                 type: "dir",
                 content: []
             }
-            let htmlString = constructDir(newdir, padding, false);
+            let htmlString = constructDir(newdir, padding, false, []);
             let dirEl = createElementFromHTML(htmlString);
             trigger.closest(".path-container").querySelector(".directory-content").appendChild(dirEl);
             electron.createDir(path);

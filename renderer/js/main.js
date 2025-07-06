@@ -92,7 +92,7 @@ function constructDir(dir, padding, root, openedFolders){
             dirhtml += constructFile(content, padding + 10);
         }
         else{
-            dirhtml += constructDir(content, padding + 10, false, openedFolders);
+            dirhtml += constructDir(content, padding + 10, false, []);
         }
     }
     dirhtml += "</div></div>";
@@ -206,7 +206,7 @@ function constructTab(trigger){
 
 document.addEventListener("DOMContentLoaded", async function(){
     closeAllTabs();
-    getElement("folder-tab").innerHTML = "";
+    getElement("folder-tab").innerHTML = "Open a folder to get started";
 })
 
 function reloadRoot(reload){

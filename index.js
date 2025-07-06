@@ -262,7 +262,7 @@ app.whenReady().then(() => {
         let cdpath = pathstr.replace("C:\\", "");
         ptyProcess.write("\r");
         ptyProcess.write("cd /\r");
-        ptyProcess.write(`cd ${cdpath}\r`);
+        ptyProcess.write(`cd "${cdpath}"\r`);
         ptyProcess.write("\r");
     })
 
