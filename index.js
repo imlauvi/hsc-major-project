@@ -25,7 +25,7 @@ function createWindow () {
         } : {}),
         width: 800,
         height: 600,
-        icon: path.join(__dirname, 'renderer/icons/icon.png'),
+        icon: path.join(__dirname, 'renderer/icons/icon.ico'),
         webPreferences: {
             contextIsolation: true,
             devTools: true,
@@ -61,7 +61,7 @@ function createSettings(){
         } : {}),
         width: 400,
         height: 300,
-        icon: path.join(__dirname, 'renderer/icons/icon.png'),
+        icon: path.join(__dirname, 'renderer/icons/icon.ico'),
         webPreferences: {
             contextIsolation: true,
             devTools: true,
