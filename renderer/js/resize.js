@@ -23,8 +23,8 @@ document.addEventListener('dragstart', function(e) {
 
 function sideTabResize(){ //maybe add mobile support
     const sideTabResize = getElement("sidetab-resize");
-
     sideTabResize.addEventListener("mousedown", startResize);
+    sideTabResize.addEventListener("touchstart", startResize);
 
     function startResize(){
         resizing = true;
@@ -33,10 +33,16 @@ function sideTabResize(){ //maybe add mobile support
 
         document.addEventListener("mousemove", resize);
         document.addEventListener("mouseup", endResize);
+
+        document.addEventListener("touchmove", resize);
+        document.addEventListener("touchend", endResize);
     }
 
     function resize(event){
         let style = window.getComputedStyle(document.body);
+        if(event instanceof TouchEvent){
+            event = event.touches[0];
+        }
 
         if(!resizing){
             return;
@@ -74,6 +80,9 @@ function sideTabResize(){ //maybe add mobile support
 
         document.removeEventListener("mousemove", resize);
         document.removeEventListener("mouseup", endResize);
+
+        document.removeEventListener("touchmove", resize);
+        document.removeEventListener("touchend", endResize);
     }
 }
 
@@ -81,6 +90,7 @@ function terminalResize(){ //maybe add mobile support
     const terminalResize = getElement("terminal-resize");
 
     terminalResize.addEventListener("mousedown", startResize);
+    terminalResize.addEventListener("touchstart", startResize);
 
     function startResize(){
         resizing = true;
@@ -89,10 +99,16 @@ function terminalResize(){ //maybe add mobile support
 
         document.addEventListener("mousemove", resize);
         document.addEventListener("mouseup", endResize);
+
+        document.addEventListener("touchmove", resize);
+        document.addEventListener("touchend", endResize);
     }
 
     function resize(event){
         style = window.getComputedStyle(document.body);
+        if(event instanceof TouchEvent){
+            event = event.touches[0];
+        }
 
         if(!resizing){
             return;
@@ -139,6 +155,9 @@ function terminalResize(){ //maybe add mobile support
 
         document.removeEventListener("mousemove", resize);
         document.removeEventListener("mouseup", endResize);
+
+        document.removeEventListener("touchmove", resize);
+        document.removeEventListener("touchend", endResize);
     }
 }
 
@@ -146,6 +165,7 @@ function codeAreaResize(){ //maybe add mobile support
     const codeAreaResize = getElement("codearea-left-resize");
 
     codeAreaResize.addEventListener("mousedown", startResize);
+    codeAreaResize.addEventListener("touchstart", startResize);
 
     function startResize(){
         resizing = true;
@@ -154,9 +174,15 @@ function codeAreaResize(){ //maybe add mobile support
 
         document.addEventListener("mousemove", resize);
         document.addEventListener("mouseup", endResize);
+
+        document.addEventListener("touchmove", resize);
+        document.addEventListener("touchend", endResize);
     }
 
     function resize(event){
+        if(event instanceof TouchEvent){
+            event = event.touches[0];
+        }
         let style = window.getComputedStyle(document.body);
 
         if(!resizing){
@@ -187,6 +213,9 @@ function codeAreaResize(){ //maybe add mobile support
 
         document.removeEventListener("mousemove", resize);
         document.removeEventListener("mouseup", endResize);
+
+        document.removeEventListener("touchmove", resize);
+        document.removeEventListener("touchend", endResize);
     }
 }
 

@@ -455,7 +455,7 @@ body[resizing] .codearea-left-resize:hover{
 .drop-indicator{
     position: absolute;
     margin-top: calc(var(--tabs-height));
-    height: calc(100% - var(--tabs-height) - var(--terminal-height) - 5px);
+    height: calc(100% - var(--tabs-height) - var(--terminal-height) - 25px);
     width: 100%;
     margin-left: 0;
     background-color: #57575781;

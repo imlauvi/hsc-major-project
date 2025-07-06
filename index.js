@@ -9,6 +9,7 @@ let win;
 let settingsPages = new Map();
 let ptyProcess;
 let shell = os.platform() === "win32" ? "powershell.exe" : "bash"
+const hidden = [".bitcode", ".git"]
 
 function createWindow () {
     // Create the browser window.
@@ -266,7 +267,7 @@ async function loadDir(pathstr){
     let dir = await fs.promises.readdir(pathstr);
     let dircontents = [];
     for(let contentpath of dir){
-        if(contentpath == ".bitcode"){
+        if(hidden.includes(contentpath)){
             continue;
         }
         fullpath = path.join(pathstr, contentpath);
