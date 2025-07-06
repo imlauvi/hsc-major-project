@@ -207,13 +207,6 @@ function constructTab(trigger){
 document.addEventListener("DOMContentLoaded", async function(){
     closeAllTabs();
     getElement("folder-tab").innerHTML = "";
-    rootDir = "C:\\Users\\leviz\\OneDrive\\Desktop\\hsc-major-project-testing";
-    reloadRoot(true);
-    tasks = await electron.loadTasks(rootDir);
-    for(let i = 0; i < tasks.length; i++){
-        tasks[i].date = new Date(tasks[i].date);
-    }
-    loadTasks();
 })
 
 function reloadRoot(reload){
