@@ -92,7 +92,7 @@ function constructDir(dir, padding, root, openedFolders){
             dirhtml += constructFile(content, padding + 10);
         }
         else{
-            dirhtml += constructDir(content, padding + 10, false, openedFolders);
+            dirhtml += constructDir(content, padding + 10, false, []);
         }
     }
     dirhtml += "</div></div>";
